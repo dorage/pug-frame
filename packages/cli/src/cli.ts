@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { readFileSync, writeFileSync } from "node:fs";
 import { basename, dirname, extname, join } from "node:path";
-import { render } from "./render.js";
+import { render } from "@pug-frame/render";
 
 interface CliArgs {
   input: string;

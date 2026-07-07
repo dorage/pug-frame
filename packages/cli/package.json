@@ -1,0 +1,19 @@
+{
+  "name": "@pug-frame/cli",
+  "version": "0.1.0",
+  "description": "pug-frame 파일을 HTML로 렌더링하는 CLI",
+  "type": "module",
+  "bin": {
+    "pug-frame": "dist/cli.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsx src/cli.ts"
+  },
+  "dependencies": {
+    "@pug-frame/render": "0.1.0"
+  }
+}
