@@ -1,0 +1,28 @@
+{
+  "name": "pug-frame",
+  "version": "0.1.0",
+  "description": "Pug 유사 문법으로 작성한 와이어프레임을 HTML 캔버스로 렌더링하는 CLI 도구",
+  "type": "module",
+  "bin": {
+    "pug-frame": "dist/cli.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx src/cli.ts",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "pug": "^3.0.3"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "@types/pug": "^2.0.10",
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.0",
+    "vitest": "^2.1.0"
+  }
+}
