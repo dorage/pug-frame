@@ -1,0 +1,27 @@
+{
+  "name": "@pug-frame/render",
+  "version": "0.1.0",
+  "description": "pug-frame 문법을 HTML로 렌더링하는 코어 라이브러리",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "pug": "^3.0.3"
+  },
+  "devDependencies": {
+    "@types/pug": "^2.0.10"
+  }
+}

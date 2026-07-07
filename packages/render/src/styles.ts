@@ -1,11 +1,22 @@
 import { FRAME_SIZES, type FrameType } from "./frames.js";
 
+export interface StyleOptions {
+  /**
+   * 캔버스를 페이지 전체가 아닌 작은 영역에 임베드할 때 true.
+   * 전역 body 리셋과 min-height:100vh를 생략해 컨텐츠 크기에 맞춘다.
+   * (@pug-frame/canvas가 Shadow DOM에 주입할 때 사용)
+   */
+  embedded?: boolean;
+}
+
 /**
  * 캔버스/프레임/구조/버튼 스타일을 생성한다.
  * 프레임별 크기 규칙은 FRAME_SIZES에서 자동 생성되므로 프레임 타입 추가 시
  * 별도 수정이 필요 없다.
  */
-export function generateStyles(): string {
+export function generateStyles(options: StyleOptions = {}): string {
+  const { embedded = false } = options;
+
   const frameSizeRules = (Object.keys(FRAME_SIZES) as FrameType[])
     .map((type) => {
       const { width, height } = FRAME_SIZES[type];
@@ -13,18 +24,22 @@ export function generateStyles(): string {
     })
     .join("\n");
 
+  // 임베드 시에는 문서 전역(body)이 없으므로 리셋/뷰포트 규칙을 뺀다.
+  const documentReset = embedded ? "" : "\nbody { margin: 0; }\n";
+  const canvasSizing = embedded
+    ? "  width: max-content;"
+    : "  min-height: 100vh;";
+
   return `
 * { box-sizing: border-box; }
-
-body { margin: 0; }
-
+${documentReset}
 .canvas {
   display: flex;
   flex-wrap: wrap;
   gap: 24px;
   padding: 24px;
   background: #f0f0f0;
-  min-height: 100vh;
+${canvasSizing}
 }
 
 .frame {

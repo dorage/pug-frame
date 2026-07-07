@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { render } from "./render.js";
+import { render, renderParts } from "./render.js";
 
 const TWO_SCREENS = `mobile
     header
@@ -49,5 +49,23 @@ describe("render", () => {
   it("body는 nested <body> 대신 클래스 div로 렌더한다", () => {
     const html = render(TWO_SCREENS);
     expect(html).toContain('class="frame-body"');
+  });
+});
+
+describe("renderParts", () => {
+  it("fragment HTML과 CSS를 분리해 반환한다", () => {
+    const { html, css } = renderParts(TWO_SCREENS);
+    expect(html).toContain('class="canvas"');
+    expect(html).not.toContain("<!DOCTYPE html>");
+    expect(css).toContain(".frame--mobile");
+  });
+
+  it("embedded 옵션은 min-height:100vh를 생략한다", () => {
+    expect(renderParts(TWO_SCREENS, { embedded: true }).css).not.toContain(
+      "100vh",
+    );
+    expect(renderParts(TWO_SCREENS, { embedded: false }).css).toContain(
+      "100vh",
+    );
   });
 });
