@@ -1,0 +1,56 @@
+{
+	"name": "pug-frame-vscode",
+	"displayName": "pug-frame",
+	"version": "0.1.0",
+	"description": "VS Code 기본 마크다운 프리뷰에서 pug-frame 코드블록을 pug-frame-canvas로 렌더링하는 확장",
+	"publisher": "pug-frame",
+	"license": "0BSD",
+	"main": "./out/extension.js",
+	"engines": {
+		"vscode": "^1.75.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [],
+	"contributes": {
+		"markdown.markdownItPlugins": true,
+		"markdown.previewScripts": [
+			"./media/pug-frame-preview.js"
+		],
+		"markdown.previewStyles": [
+			"./media/pug-frame-preview.css"
+		],
+		"configuration": {
+			"title": "pug-frame",
+			"properties": {
+				"pugFrame.canvasHeight": {
+					"type": "number",
+					"default": 480,
+					"minimum": 1,
+					"description": "pug-frame 코드블록을 렌더링할 캔버스의 높이(px)."
+				},
+				"pugFrame.showControls": {
+					"type": "boolean",
+					"default": true,
+					"description": "캔버스에 이동/줌 버튼을 표시합니다."
+				}
+			}
+		}
+	},
+	"scripts": {
+		"dev": "node esbuild.config.mjs",
+		"build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production"
+	},
+	"keywords": [],
+	"dependencies": {
+		"@pug-frame/canvas": "0.1.0"
+	},
+	"devDependencies": {
+		"@types/markdown-it": "^14.1.2",
+		"@types/node": "^22.15.17",
+		"@types/vscode": "^1.75.0",
+		"esbuild": "0.25.5",
+		"typescript": "^5.8.3"
+	}
+}

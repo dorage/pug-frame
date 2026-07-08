@@ -1,0 +1,15 @@
+# npm
+node_modules
+
+# 빌드 산출물 (릴리스 자산이라 저장소에 커밋하지 않는다)
+out
+media/pug-frame-preview.js
+
+# sourcemaps
+*.map
+
+# vscode
+.vscode-test
+
+# macOS
+.DS_Store
