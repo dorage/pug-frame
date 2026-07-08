@@ -34,4 +34,20 @@ describe("Camera", () => {
     camera.reset();
     expect(camera).toMatchObject({ x: 0, y: 0, zoom: 1 });
   });
+
+  it("focusOn은 줌을 1로 되돌리고 요소를 뷰포트 중앙에 정렬한다", () => {
+    const camera = new Camera();
+    camera.panBy(123, -45);
+    camera.zoomAt(0, 0, 3);
+    // 자연 좌표 (100,200)에 100x50 요소, 400x600 뷰포트
+    camera.focusOn({ x: 100, y: 200, width: 100, height: 50 }, 400, 600);
+    expect(camera.zoom).toBe(1);
+    // 요소 중심 (150, 225)이 뷰포트 중심 (200, 300)에 오도록 이동
+    expect(camera.x).toBe(50);
+    expect(camera.y).toBe(75);
+    const centerX = (150 + camera.x) * camera.zoom;
+    const centerY = (225 + camera.y) * camera.zoom;
+    expect(centerX).toBe(200);
+    expect(centerY).toBe(300);
+  });
 });

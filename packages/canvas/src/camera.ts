@@ -52,4 +52,21 @@ export class Camera {
     this.y = 0;
     this.zoom = 1;
   }
+
+  /**
+   * 요소 사각형을 뷰포트 중앙에 오도록 카메라를 맞춘다.
+   * 줌은 기본값 1로 되돌리고(확대/축소 없이 원본 스케일) 요소 중심을
+   * 뷰포트 중심에 정렬한다.
+   *
+   * @param rect stage 자연(비스케일) 좌표계의 요소 사각형
+   */
+  focusOn(
+    rect: { x: number; y: number; width: number; height: number },
+    viewportW: number,
+    viewportH: number,
+  ): void {
+    this.zoom = 1;
+    this.x = viewportW / 2 - (rect.x + rect.width / 2);
+    this.y = viewportH / 2 - (rect.y + rect.height / 2);
+  }
 }
