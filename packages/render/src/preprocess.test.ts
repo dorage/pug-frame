@@ -39,4 +39,27 @@ describe("preprocess", () => {
       "div.frame.frame--mobile\n\ndiv.frame.frame--mobile",
     );
   });
+
+  it("프레임 키워드의 #id를 보존한다", () => {
+    expect(preprocess("mobile#main-1")).toBe("div.frame.frame--mobile#main-1");
+  });
+
+  it("일반 태그의 #id를 보존한다", () => {
+    expect(preprocess("div#foo")).toBe("div#foo");
+  });
+
+  it("한 줄 attribute와 텍스트를 함께 처리한다", () => {
+    expect(preprocess("button(focus='main-2') Next")).toBe(
+      "button(focus='main-2') Next",
+    );
+  });
+
+  it("여러 줄 attribute 블록은 변환 없이 통과시킨다", () => {
+    const input = [
+      "        button(",
+      "            focus='main-2'",
+      "        ) Next",
+    ].join("\n");
+    expect(preprocess(input)).toBe(input);
+  });
 });

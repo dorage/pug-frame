@@ -36,18 +36,32 @@ export const SECTION_CLASSES: Record<string, string> = {
 };
 
 /**
+ * 태그 토큰에서 선행 키워드와 그 뒤의 pug 셀렉터/attribute 잔여부를 분리한다.
+ * 예: `mobile#main-1` → { keyword: "mobile", suffix: "#main-1" },
+ *     `button(focus='x')` → { keyword: "button", suffix: "(focus='x')" }
+ */
+const TAG_PATTERN = /^([A-Za-z][\w-]*)(.*)$/;
+
+/**
  * 주어진 태그 토큰을 pug 태그 표현으로 변환한다.
- * - 프레임 키워드(mobile 등): `div.frame.frame--{type}`
- * - 구조 키워드(header/body/footer): `div.frame-{section}`
+ * 선행 키워드만 매핑하고 `#id`/`.class`/`(attrs)` 등 pug 잔여부는 보존한다.
+ * - 프레임 키워드(mobile 등): `div.frame.frame--{type}` + 잔여부
+ * - 구조 키워드(header/body/footer): `div.frame-{section}` + 잔여부
  * - 그 외(div, button 등): 그대로 반환
  */
 export function mapTag(tag: string): string {
-  if ((FRAME_TYPES as string[]).includes(tag)) {
-    return `div.frame.frame--${tag}`;
+  const match = TAG_PATTERN.exec(tag);
+  if (!match) {
+    return tag;
   }
-  const sectionClass = SECTION_CLASSES[tag];
+  const [, keyword, suffix] = match;
+
+  if ((FRAME_TYPES as string[]).includes(keyword)) {
+    return `div.frame.frame--${keyword}${suffix}`;
+  }
+  const sectionClass = SECTION_CLASSES[keyword];
   if (sectionClass) {
-    return `div.${sectionClass}`;
+    return `div.${sectionClass}${suffix}`;
   }
   return tag;
 }

@@ -50,6 +50,18 @@ describe("render", () => {
     const html = render(TWO_SCREENS);
     expect(html).toContain('class="frame-body"');
   });
+
+  it("프레임 #id를 id 속성으로 렌더한다", () => {
+    const html = render("mobile#main-1\n    body\n        div Ilsan!");
+    expect(html).toContain('class="frame frame--mobile"');
+    expect(html).toContain('id="main-1"');
+  });
+
+  it("focus attribute를 요소에 렌더한다", () => {
+    const html = render("mobile\n    body\n        button(focus='main-2') Next");
+    expect(html).toContain('focus="main-2"');
+    expect(html).toContain(">Next</button>");
+  });
 });
 
 describe("renderParts", () => {
