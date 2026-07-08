@@ -86,6 +86,12 @@ describe("pugFrameCanvas", () => {
     expect(fallbackText(host)).toContain("렌더링할 수 없습니다");
   });
 
+  it("focus outline 스타일을 shadow에 주입한다", async () => {
+    const canvas = pugFrameCanvas(host);
+    await canvas.render(SAMPLE);
+    expect(shadowHtml(host)).toContain(".pf-focused");
+  });
+
   it("controls:false면 버튼을 만들지 않는다", () => {
     pugFrameCanvas(host, { controls: false });
     expect(host.querySelector("button")).toBeNull();
