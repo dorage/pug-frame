@@ -16,7 +16,8 @@ NX 모노레포로 구성되며, 모든 패키지는 `packages/*`에 있고 `@pu
 
 각 패키지의 API와 도메인 정보는 `docs/`에 있다.
 
-- [render](./docs/render.md) — pug-frame 문법(도메인)과 렌더 API. 다른 패키지의 기반이다.
+- [syntax](./docs/syntax.md) — pug-frame 문법. 기본은 Pug, 추가 문법(focus 등)은 Additional Syntax.
+- [render](./docs/render.md) — 렌더 API와 도메인 매핑. 다른 패키지의 기반이다.
 - [cli](./docs/cli.md) — `pug-frame` CLI 사용법과 옵션.
 - [canvas](./docs/canvas.md) — `pugFrameCanvas` API, 카메라/인터랙션.
 
@@ -48,4 +49,4 @@ mobile
 - 최상위 블록 하나가 화면 하나. 문서에 여러 개를 둘 수 있다.
 - `div "텍스트"`처럼 따옴표로 요소 텍스트를 지정한다.
 
-문법에 대한 자세한 설명은 [render 문서](./docs/render.md)를 참고한다.
+문법에 대한 자세한 설명은 [syntax 문서](./docs/syntax.md)를 참고한다.
