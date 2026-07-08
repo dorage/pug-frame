@@ -12,6 +12,12 @@ NX 모노레포로 구성되며, 모든 패키지는 `packages/*`에 있고 `@pu
 - `@pug-frame/cli` — pug-frame 파일을 HTML로 렌더링하는 커맨드라인 도구.
 - `@pug-frame/canvas` — 웹페이지 내 작은 영역에서 pug-frame을 렌더링하고 팬/줌하는 뷰어 컴포넌트.
 
+## 플러그인
+
+3rd-party 도구 연결용 패키지는 `plugins/*`에 있으며, 코어 패키지(`@pug-frame/*`)를 소비한다.
+
+- `plugins/obsidian` — Obsidian의 `pug-frame` 코드블록을 `@pug-frame/canvas`로 렌더링하는 플러그인.
+
 ## 문서
 
 각 패키지의 API와 도메인 정보는 `docs/`에 있다.
@@ -20,6 +26,7 @@ NX 모노레포로 구성되며, 모든 패키지는 `packages/*`에 있고 `@pu
 - [render](./docs/render.md) — 렌더 API와 도메인 매핑. 다른 패키지의 기반이다.
 - [cli](./docs/cli.md) — `pug-frame` CLI 사용법과 옵션.
 - [canvas](./docs/canvas.md) — `pugFrameCanvas` API, 카메라/인터랙션.
+- [obsidian](./docs/obsidian.md) — Obsidian 플러그인 사용법과 빌드.
 
 ## 시작하기
 
