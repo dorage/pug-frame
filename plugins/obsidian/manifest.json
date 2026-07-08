@@ -1,0 +1,9 @@
+{
+	"id": "pug-frame",
+	"name": "pug-frame",
+	"version": "0.1.0",
+	"minAppVersion": "1.0.0",
+	"description": "pug-frame 코드블록을 팬/줌 가능한 캔버스 와이어프레임으로 렌더링합니다.",
+	"author": "pug-frame",
+	"isDesktopOnly": false
+}

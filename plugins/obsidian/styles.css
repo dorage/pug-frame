@@ -1,0 +1,12 @@
+/*
+pug-frame 코드블록 캔버스 스타일.
+높이는 플러그인 설정값으로 인라인 지정되며, 여기서는 테두리/배경만 준다.
+*/
+
+.pug-frame-canvas {
+	width: 100%;
+	border: 1px solid var(--background-modifier-border);
+	border-radius: var(--radius-s);
+	background: var(--background-primary);
+	overflow: hidden;
+}
