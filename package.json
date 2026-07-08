@@ -5,7 +5,8 @@
   "description": "pug-frame 모노레포 (@pug-frame/render, @pug-frame/cli, @pug-frame/canvas)",
   "type": "module",
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "plugins/*"
   ],
   "scripts": {
     "build": "nx run-many -t build",
