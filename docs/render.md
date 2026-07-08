@@ -9,12 +9,23 @@ pug-frame은 Pug 유사 문법으로 와이어프레임을 기술한다. 표준 
 - 들여쓰기 기반 중첩: Pug와 동일하게 들여쓰기로 부모-자식 관계를 표현한다.
 - 최상위 블록 = 화면 하나: 들여쓰기 0의 프레임 키워드가 새 화면을 시작하며, 한 문서에 여러 개를 둘 수 있다.
 - 따옴표 텍스트: `div "Rescene"`처럼 요소의 텍스트를 따옴표로 지정한다. (표준 Pug의 `div Rescene`와 다른 지점)
+- ID / attribute: 키워드 뒤에 Pug 셀렉터·attribute를 그대로 붙일 수 있다. `mobile#main-1`은 프레임에 `id="main-1"`을, `button(focus='main-2')`는 버튼에 `focus="main-2"` attribute를 부여한다.
 
 ### 키워드
 
 - 프레임 키워드: `mobile`, `tablet`, `desktop`. 화면의 프레임 크기를 정한다.
 - 구조 키워드: `header`, `body`, `footer`. 프레임 내부의 시맨틱 영역이다.
 - 리프 태그: `div`, `button` 등. 표준 태그로 그대로 렌더된다.
+
+### ID와 attribute
+
+키워드/태그 토큰은 선행 식별자만 클래스 div로 매핑되고, 그 뒤의 Pug 셀렉터(`#id`, `.class`)와 attribute(`(...)`)는 보존된다.
+
+- `mobile#main-1` → `<div class="frame frame--mobile" id="main-1">`
+- `button(focus='main-2') "Next"` → `<button focus="main-2">Next</button>`
+- 여러 줄 attribute도 허용되지만(열린 `(`가 닫힐 때까지 변환 없이 통과), 문서 예시는 한 줄 표기를 기본으로 한다.
+
+`id`는 `@pug-frame/canvas`의 focus 기능에서 카메라 포커스 대상으로 쓰인다. focus 인터랙션은 [canvas 문서](./canvas.md)를 참고한다.
 
 ### HTML 매핑
 
@@ -31,6 +42,7 @@ pug-frame은 Pug 유사 문법으로 와이어프레임을 기술한다. 표준 
 - 프레임과 구조 영역: 검은색 border + 흰색 배경.
 - `button`: 검은색 배경 + 흰색 텍스트.
 - 여러 화면은 `.canvas` 컨테이너 위에 flex-wrap으로 나열된다.
+- 프레임 ID 라벨: `id`를 가진 프레임은 `::before`로 프레임 **바깥쪽 위**에 id 텍스트를 표시한다. 라벨이 잘리지 않도록 콘텐츠 클리핑(`overflow: hidden`)은 프레임이 아니라 내부 구조 영역에 둔다.
 
 ### 렌더링 파이프라인
 

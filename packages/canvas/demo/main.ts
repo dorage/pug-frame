@@ -1,20 +1,20 @@
 import { pugFrameCanvas } from "../src/index";
 
-const sample = `mobile
+const sample = `mobile#main-1
     header
         div "Rescene"
     body
         div "Ilsan!"
-        button "Next"
+        button(focus='main-2') "Next"
     footer
         div "2026.07.07"
 
-mobile
+mobile#main-2
     header
         div "Rescene"
     body
         div "Yaho!"
-        button "Prev"
+        button(focus='main-1') "Prev"
     footer
         div "2026.07.07"
 `;

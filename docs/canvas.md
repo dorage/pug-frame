@@ -47,6 +47,17 @@ Pointer Events로 마우스와 터치를 통합 처리한다.
 - 핀치 줌: 두 포인터의 거리 변화로 두 포인터 중점을 기준으로 줌한다.
 - 휠 줌: 커서 아래 지점을 고정한 채 줌한다(`WHEEL_ZOOM_INTENSITY = 0.0015`).
 - 물리 버튼: 줌 인 / 줌 아웃 / 리셋. 버튼 줌 배율은 `BUTTON_ZOOM_STEP = 1.2`이며 캔버스 중심을 기준으로 한다.
+- 클릭(탭): 움직임이 `CLICK_MOVE_THRESHOLD = 5`px 미만인 단일 포인터를 클릭으로 보고 focus를 처리한다(드래그와 구분).
+
+## focus
+
+`focus` attribute를 가진 요소를 클릭하면 그 값(id)을 가진 요소로 카메라를 이동한다.
+
+- 트리거: `button(focus='main-2')`처럼 `focus="<id>"`를 가진 요소(또는 그 조상)를 클릭.
+- 카메라: 줌을 기본값 1로 되돌리고, 대상 요소를 뷰포트 중앙에 정렬한다(`Camera.focusOn`).
+- 표시: focus된 요소에 붉은 outline과 id 라벨(좌상단 바깥)을 붙인다. 이 스타일은 Shadow 내부에 주입되므로 줌에 따라 스케일되어 항상 요소 크기와 일치한다. 프레임이 focus되면 기본 검은 id 라벨은 감추고 붉은 라벨만 남긴다.
+- 해제: focus된 요소 바깥(다른 프레임·회색 배경 등)을 클릭하면 focus가 취소된다.
+- 대상 id는 렌더 시점의 Shadow 안에서 찾는다. 새로 `render()`하면 focus 상태는 초기화된다.
 
 ## `Camera`
 
@@ -64,6 +75,7 @@ Pointer Events로 마우스와 터치를 통합 처리한다.
 - `panBy(dx, dy)`: 화면 좌표 기준으로 이동한다.
 - `zoomAt(px, py, factor)`: 뷰포트 좌표 `(px, py)`를 중심으로 줌하며, 해당 지점 아래 컨텐츠를 화면상 고정한다. `minZoom`/`maxZoom`으로 clamp된다.
 - `reset()`: `x=0, y=0, zoom=1`로 되돌린다.
+- `focusOn(rect, viewportW, viewportH)`: 줌을 1로 되돌리고 `rect`(stage 자연 좌표계의 요소 사각형) 중심을 뷰포트 중앙에 맞춘다. focus 기능이 사용한다.
 
 ## 사용 예시
 
