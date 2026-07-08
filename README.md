@@ -35,12 +35,21 @@ npx nx run-many -t test    # 전체 테스트
 ## 문법 예시
 
 ```pug-frame
-mobile
+mobile#main-1
     header
         div "Rescene"
     body
         div "Ilsan!"
-        button "Next"
+        button(focus='main-2') "Next"
+    footer
+        div "2026.07.07"
+
+mobile#main-2
+    header
+        div "Rescene"
+    body
+        div "Yaho!"
+        button(focus='main-1') "Prev"
     footer
         div "2026.07.07"
 ```
@@ -48,5 +57,6 @@ mobile
 - 들여쓰기 기반 중첩(Pug와 동일).
 - 최상위 블록 하나가 화면 하나. 문서에 여러 개를 둘 수 있다.
 - `div "텍스트"`처럼 따옴표로 요소 텍스트를 지정한다.
+- `mobile#main-1`로 프레임에 id를 붙이고, `button(focus='main-2')`처럼 `focus`를 지정하면 클릭 시 해당 id로 카메라가 포커스된다.
 
 문법에 대한 자세한 설명은 [syntax 문서](./docs/syntax.md)를 참고한다.
