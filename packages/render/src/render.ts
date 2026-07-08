@@ -1,4 +1,4 @@
-import pug from "pug";
+import { compilePug } from "./compile.js";
 import { preprocess } from "./preprocess.js";
 import { generateStyles } from "./styles.js";
 
@@ -36,7 +36,7 @@ export function renderParts(
 /** preprocess → pug.render → `.canvas` 래핑까지의 fragment HTML을 만든다. */
 export function renderFragment(source: string): string {
   const pugSource = preprocess(source);
-  const fragment = pug.render(pugSource, { pretty: true });
+  const fragment = compilePug(pugSource);
   return `<div class="canvas">${fragment}</div>`;
 }
 

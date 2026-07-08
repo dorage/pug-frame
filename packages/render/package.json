@@ -19,9 +19,10 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "pug": "^3.0.3"
-  },
-  "devDependencies": {
-    "@types/pug": "^2.0.10"
+    "pug-code-gen": "^3.0.3",
+    "pug-lexer": "^5.0.1",
+    "pug-linker": "^4.0.0",
+    "pug-parser": "^6.0.0",
+    "pug-runtime": "^3.0.1"
   }
 }
