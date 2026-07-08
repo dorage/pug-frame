@@ -43,11 +43,22 @@ ${canvasSizing}
 }
 
 .frame {
+  position: relative;
   display: flex;
   flex-direction: column;
   border: 1px solid #000;
   background: #fff;
-  overflow: hidden;
+}
+
+/* 프레임 ID를 프레임 바깥쪽 위에 표시한다. */
+.frame[id]::before {
+  content: attr(id);
+  position: absolute;
+  top: -20px;
+  left: 0;
+  font: 12px/1 monospace;
+  color: #000;
+  pointer-events: none;
 }
 
 ${frameSizeRules}
@@ -58,6 +69,7 @@ ${frameSizeRules}
   border: 1px solid #000;
   background: #fff;
   padding: 12px;
+  overflow: hidden;
 }
 
 .frame-body {
