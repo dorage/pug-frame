@@ -1,6 +1,7 @@
 import { fileURLToPath } from "node:url";
 import { defineConfig } from "vite";
 import dts from "vite-plugin-dts";
+import { nodePolyfills } from "vite-plugin-node-polyfills";
 
 export default defineConfig({
   build: {
@@ -10,10 +11,11 @@ export default defineConfig({
       fileName: "index",
       formats: ["es"],
     },
-    // render(및 pug)는 소비자/데모 번들러가 처리하도록 외부화한다.
-    rollupOptions: {
-      external: ["@pug-frame/render", "pug"],
-    },
   },
-  plugins: [dts({ include: ["src"], rollupTypes: true })],
+  plugins: [
+    // render(pug 하위 패키지 포함)를 번들에 넣고 assert/util/process를
+    // 폴리필해, 소비자가 별도 설정 없이 브라우저에서 바로 쓸 수 있게 한다.
+    nodePolyfills(),
+    dts({ include: ["src"], rollupTypes: true }),
+  ],
 });
