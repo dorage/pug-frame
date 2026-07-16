@@ -1,0 +1,9 @@
+/* placeholder는 캔버스 뷰포트가 된다. 높이는 preview.ts가 인라인으로 지정한다. */
+.pug-frame-canvas {
+	display: block;
+	margin: 1em 0;
+	border: 1px solid var(--vscode-panel-border, #ccc);
+	border-radius: 4px;
+	background: #fff;
+	overflow: hidden;
+}

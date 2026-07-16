@@ -17,6 +17,7 @@ NX 모노레포로 구성되며, 모든 패키지는 `packages/*`에 있고 `@pu
 3rd-party 도구 연결용 패키지는 `plugins/*`에 있으며, 코어 패키지(`@pug-frame/*`)를 소비한다.
 
 - `plugins/obsidian` — Obsidian의 `pug-frame` 코드블록을 `@pug-frame/canvas`로 렌더링하는 플러그인.
+- `plugins/vscode` — VS Code 기본 마크다운 프리뷰의 `pug-frame` 코드블록을 `@pug-frame/canvas`로 렌더링하는 확장.
 
 ## 문서
 
@@ -27,6 +28,7 @@ NX 모노레포로 구성되며, 모든 패키지는 `packages/*`에 있고 `@pu
 - [cli](./docs/cli.md) — `pug-frame` CLI 사용법과 옵션.
 - [canvas](./docs/canvas.md) — `pugFrameCanvas` API, 카메라/인터랙션.
 - [obsidian](./docs/obsidian.md) — Obsidian 플러그인 사용법과 빌드.
+- [vscode](./docs/vscode.md) — VS Code 확장 사용법과 빌드.
 
 ## 시작하기
 
