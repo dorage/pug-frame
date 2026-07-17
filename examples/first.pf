@@ -1,17 +1,17 @@
 mobile
     header
-        div "Rescene"
+        div Rescene
     body
-        div "Ilsan!"
-        button "Next"
+        div Ilsan!
+        button Next
     footer
-        div "2026.07.07"
+        div 2026.07.07
 
 mobile
     header
-        div "Rescene"
+        div Rescene
     body
-        div "Yaho!"
-        button "Prev"
+        div Yaho!
+        button Prev
     footer
-        div "2026.07.07"
+        div 2026.07.07

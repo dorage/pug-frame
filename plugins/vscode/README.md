@@ -12,10 +12,10 @@ VS Code **기본 마크다운 프리뷰**에서 `pug-frame` 코드블록을 팬/
 ```pug-frame
 mobile#main-1
     header
-        div "Rescene"
+        div Rescene
     body
-        div "Ilsan!"
-        button(focus='main-2') "Next"
+        div Ilsan!
+        button(focus='main-2') Next
 ```
 ````
 

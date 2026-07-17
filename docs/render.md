@@ -31,7 +31,7 @@ pug-frame은 Pug 위에 와이어프레임용 의미를 얹은 DSL이다. 표준
 
 ### 렌더링 파이프라인
 
-1. `preprocess`: 각 줄의 따옴표 제거 + 키워드→클래스 매핑(들여쓰기 보존).
+1. `preprocess`: 각 줄의 선행 키워드→클래스 매핑(들여쓰기·텍스트 보존).
 2. 컴파일: pug 하위 패키지(`pug-lexer`→`pug-parser`→`pug-linker`→`pug-code-gen`→`pug-runtime`)를 직접 조합해 HTML 생성. pug 메인 패키지의 `pug-load`(fs, is-core-module)를 우회하므로 Node·브라우저 양쪽에서 동작한다.
 3. `.canvas`로 감싸고, 정적 출력이면 `p-*` 인터랙션 attribute를 제거한 뒤 전체 문서(`render`) 또는 fragment+CSS(`renderParts`)로 반환한다.
 
@@ -71,7 +71,7 @@ pug-frame 소스를 자기완결적 단일 HTML 문서 문자열로 렌더한다
 
 ### `preprocess(source)`
 
-pug-frame 문법을 표준 pug 소스로 변환한다. 들여쓰기는 보존하고 태그 토큰/텍스트만 바꾼다.
+pug-frame 문법을 표준 pug 소스로 변환한다. 들여쓰기와 텍스트는 보존하고 선행 태그 토큰만 바꾼다.
 
 - 매개변수 `source` (string): pug-frame 소스.
 - 반환 (string): 표준 pug 소스.
@@ -98,10 +98,10 @@ import { render, renderParts } from "@pug-frame/render";
 
 const source = `mobile
     header
-        div "Rescene"
+        div Rescene
     body
-        div "Ilsan!"
-        button "Next"`;
+        div Ilsan!
+        button Next`;
 
 // 전체 문서
 const html = render(source, { title: "wireframe" });

@@ -22,10 +22,10 @@ VS Code 마크다운 프리뷰는 확장 호스트(Node)와 프리뷰 웹뷰(브
 ```pug-frame
 mobile#main-1
     header
-        div "Rescene"
+        div Rescene
     body
-        div "Ilsan!"
-        button(focus='main-2') "Next"
+        div Ilsan!
+        button(focus='main-2') Next
 ```
 ````
 
