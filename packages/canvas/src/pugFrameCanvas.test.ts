@@ -92,6 +92,21 @@ describe("pugFrameCanvas", () => {
     expect(shadowHtml(host)).toContain(".pf-focused");
   });
 
+  it("tooltip 마커/말풍선 스타일을 shadow에 주입한다", async () => {
+    const canvas = pugFrameCanvas(host);
+    await canvas.render(SAMPLE);
+    expect(shadowHtml(host)).toContain("[p-tooltip]::before");
+    expect(shadowHtml(host)).toContain("attr(p-tooltip)");
+  });
+
+  it("embedded 렌더라 p-* attribute를 shadow에 보존한다", async () => {
+    const canvas = pugFrameCanvas(host);
+    await canvas.render(
+      'mobile\n    body\n        div(p-tooltip="설명") "Hi"',
+    );
+    expect(shadowHtml(host)).toContain('p-tooltip="설명"');
+  });
+
   it("controls:false면 버튼을 만들지 않는다", () => {
     pugFrameCanvas(host, { controls: false });
     expect(host.querySelector("button")).toBeNull();

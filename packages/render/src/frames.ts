@@ -38,7 +38,7 @@ export const SECTION_CLASSES: Record<string, string> = {
 /**
  * 태그 토큰에서 선행 키워드와 그 뒤의 pug 셀렉터/attribute 잔여부를 분리한다.
  * 예: `mobile#main-1` → { keyword: "mobile", suffix: "#main-1" },
- *     `button(focus='x')` → { keyword: "button", suffix: "(focus='x')" }
+ *     `button(p-focus='x')` → { keyword: "button", suffix: "(p-focus='x')" }
  */
 const TAG_PATTERN = /^([A-Za-z][\w-]*)(.*)$/;
 

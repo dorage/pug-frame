@@ -12,6 +12,24 @@ export interface RenderPartsOptions {
   embedded?: boolean;
 }
 
+export interface RenderFragmentOptions {
+  /**
+   * pug-frame 전용 인터랙션 attribute(`p-*`)를 fragment에 남길지 여부.
+   * canvas 뷰어처럼 이 attribute를 해석하는 소비자만 true로 준다.
+   * 기본 false — 정적 HTML 출력에서는 제거한다.
+   */
+  keepInteractive?: boolean;
+}
+
+/**
+ * 컴파일된 HTML에서 pug-frame 전용 `p-*` attribute를 제거한다.
+ * 정적 출력에는 표준 HTML만 남기고, 인터랙션은 canvas 뷰어에서만 해석하기 위함.
+ * 문자열 정규식이라 본문 텍스트의 `p-x="y"` 형태를 오탐할 수 있으나 DSL 특성상 위험은 낮다.
+ */
+function stripInteractiveAttrs(html: string): string {
+  return html.replace(/\s+p-[\w-]+(=("[^"]*"|'[^']*'))?/g, "");
+}
+
 export interface RenderParts {
   /** `.canvas` 래퍼를 포함한 fragment HTML */
   html: string;
@@ -27,16 +45,24 @@ export function renderParts(
   source: string,
   options: RenderPartsOptions = {},
 ): RenderParts {
+  const embedded = options.embedded ?? false;
   return {
-    html: renderFragment(source),
-    css: generateStyles({ embedded: options.embedded ?? false }),
+    // embedded(=canvas 등 인터랙션 소비자)일 때만 p-* attribute를 보존한다.
+    html: renderFragment(source, { keepInteractive: embedded }),
+    css: generateStyles({ embedded }),
   };
 }
 
 /** preprocess → pug.render → `.canvas` 래핑까지의 fragment HTML을 만든다. */
-export function renderFragment(source: string): string {
+export function renderFragment(
+  source: string,
+  options: RenderFragmentOptions = {},
+): string {
   const pugSource = preprocess(source);
-  const fragment = compilePug(pugSource);
+  const compiled = compilePug(pugSource);
+  const fragment = options.keepInteractive
+    ? compiled
+    : stripInteractiveAttrs(compiled);
   return `<div class="canvas">${fragment}</div>`;
 }
 

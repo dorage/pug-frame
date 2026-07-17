@@ -4,6 +4,7 @@ export {
   renderFragment,
   type RenderOptions,
   type RenderPartsOptions,
+  type RenderFragmentOptions,
   type RenderParts,
 } from "./render.js";
 export { generateStyles, type StyleOptions } from "./styles.js";

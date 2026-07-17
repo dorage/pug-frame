@@ -15,12 +15,13 @@ mobile#main-1
         div "Rescene"
     body
         div "Ilsan!"
-        button(focus='main-2') "Next"
+        button(p-focus='main-2') "Next"
 ```
 ````
 
 - 팬(드래그)·줌(휠/버튼)으로 캔버스를 탐색한다.
-- `button(focus='main-2')`처럼 `focus`를 지정하면 클릭 시 해당 id로 카메라가 이동한다.
+- `button(p-focus='main-2')`처럼 `p-focus`를 지정하면 클릭 시 해당 id로 카메라가 이동한다.
+- `div(p-tooltip='설명')`처럼 `p-tooltip`을 지정하면 오른쪽 상단 `*` 마커와 호버/터치 말풍선을 표시한다.
 - 문법 전체는 [syntax 문서](../../docs/syntax.md) 참고.
 
 ## 설정

@@ -22,12 +22,13 @@ mobile#main-1
         div "Rescene"
     body
         div "Ilsan!"
-        button(focus='main-2') "Next"
+        button(p-focus='main-2') "Next"
 ```
 ````
 
 - 팬(드래그)·줌(휠/버튼)으로 탐색한다.
-- `focus` 지정 요소를 클릭하면 해당 id 프레임으로 카메라가 이동한다.
+- `p-focus` 지정 요소를 클릭하면 해당 id 프레임으로 카메라가 이동한다.
+- `p-tooltip` 지정 요소는 오른쪽 상단에 `*` 마커가 붙고, 호버·터치 시 말풍선으로 내용을 보여준다.
 - 문법 전체는 [syntax 문서](./syntax.md)를 참고한다.
 
 ## 설정

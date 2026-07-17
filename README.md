@@ -23,7 +23,7 @@ NX 모노레포로 구성되며, 모든 패키지는 `packages/*`에 있고 `@pu
 
 각 패키지의 API와 도메인 정보는 `docs/`에 있다.
 
-- [syntax](./docs/syntax.md) — pug-frame 문법. 기본은 Pug, 추가 문법(focus 등)은 Additional Syntax.
+- [syntax](./docs/syntax.md) — pug-frame 문법. 기본은 Pug, 추가 문법(`p-focus`/`p-tooltip` 등 `p-` 인터랙션 attribute)은 Additional Syntax.
 - [render](./docs/render.md) — 렌더 API와 도메인 매핑. 다른 패키지의 기반이다.
 - [cli](./docs/cli.md) — `pug-frame` CLI 사용법과 옵션.
 - [canvas](./docs/canvas.md) — `pugFrameCanvas` API, 카메라/인터랙션.
@@ -49,7 +49,8 @@ mobile#main-1
         div "Rescene"
     body
         div "Ilsan!"
-        button(focus='main-2') "Next"
+        button(p-focus='main-2') "Next"
+        div(p-tooltip='다음 화면으로 이동합니다') "?"
     footer
         div "2026.07.07"
 
@@ -58,7 +59,7 @@ mobile#main-2
         div "Rescene"
     body
         div "Yaho!"
-        button(focus='main-1') "Prev"
+        button(p-focus='main-1') "Prev"
     footer
         div "2026.07.07"
 ```
@@ -66,6 +67,7 @@ mobile#main-2
 - 들여쓰기 기반 중첩(Pug와 동일).
 - 최상위 블록 하나가 화면 하나. 문서에 여러 개를 둘 수 있다.
 - `div "텍스트"`처럼 따옴표로 요소 텍스트를 지정한다.
-- `mobile#main-1`로 프레임에 id를 붙이고, `button(focus='main-2')`처럼 `focus`를 지정하면 클릭 시 해당 id로 카메라가 포커스된다.
+- `mobile#main-1`로 프레임에 id를 붙이고, `button(p-focus='main-2')`처럼 `p-focus`를 지정하면 클릭 시 해당 id로 카메라가 포커스된다.
+- `p-`로 시작하는 attribute는 pug-frame 전용 인터랙션 기능이다(`p-focus`, `p-tooltip` 등). canvas 뷰어에서만 해석되며 정적 HTML 출력에서는 제거된다.
 
 문법에 대한 자세한 설명은 [syntax 문서](./docs/syntax.md)를 참고한다.

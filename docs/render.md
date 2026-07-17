@@ -6,10 +6,11 @@ pug-frame 문법을 HTML로 렌더링하는 코어 라이브러리. CLI와 canva
 
 pug-frame은 Pug 위에 와이어프레임용 의미를 얹은 DSL이다. 표준 Pug와의 핵심 차이는 **하나의 문서에 여러 화면(screen)을 담을 수 있다**는 점이다.
 
-문법 전체(기본 Pug + focus 등 추가 문법)는 [syntax 문서](./syntax.md)에 정리되어 있다. 여기서는 렌더가 문법을 **어떤 HTML로 매핑**하는지에 집중한다.
+문법 전체(기본 Pug + `p-focus`/`p-tooltip` 등 추가 문법)는 [syntax 문서](./syntax.md)에 정리되어 있다. 여기서는 렌더가 문법을 **어떤 HTML로 매핑**하는지에 집중한다.
 
 - 프레임 키워드(`mobile`/`tablet`/`desktop`), 구조 키워드(`header`/`body`/`footer`)는 클래스 div로 매핑된다.
 - 그 외 리프 태그(`div`, `button` 등)와 `#id`·attribute는 Pug가 처리하는 대로 보존된다.
+- 단, `p-`로 시작하는 pug-frame 전용 인터랙션 attribute(`p-focus`, `p-tooltip` 등)는 **정적 출력에서 제거**된다. canvas처럼 이를 해석하는 임베드 소비자(`renderParts`의 `embedded: true`)에서만 보존된다.
 
 ### HTML 매핑
 
@@ -32,7 +33,7 @@ pug-frame은 Pug 위에 와이어프레임용 의미를 얹은 DSL이다. 표준
 
 1. `preprocess`: 각 줄의 따옴표 제거 + 키워드→클래스 매핑(들여쓰기 보존).
 2. 컴파일: pug 하위 패키지(`pug-lexer`→`pug-parser`→`pug-linker`→`pug-code-gen`→`pug-runtime`)를 직접 조합해 HTML 생성. pug 메인 패키지의 `pug-load`(fs, is-core-module)를 우회하므로 Node·브라우저 양쪽에서 동작한다.
-3. `.canvas`로 감싸고, 전체 문서(`render`) 또는 fragment+CSS(`renderParts`)로 반환한다.
+3. `.canvas`로 감싸고, 정적 출력이면 `p-*` 인터랙션 attribute를 제거한 뒤 전체 문서(`render`) 또는 fragment+CSS(`renderParts`)로 반환한다.
 
 ## API
 
@@ -49,15 +50,16 @@ pug-frame 소스를 자기완결적 단일 HTML 문서 문자열로 렌더한다
 전체 문서가 아닌, fragment HTML과 CSS를 **분리**해 반환한다. 작은 영역에 임베드하는 canvas가 사용한다.
 
 - 매개변수 `source` (string): pug-frame 소스.
-- 매개변수 `options.embedded` (boolean, 선택): 임베드용 스타일 여부. 기본 `false`. `true`면 전역 `body` 리셋과 `min-height: 100vh`를 생략한다.
+- 매개변수 `options.embedded` (boolean, 선택): 임베드용 스타일 여부. 기본 `false`. `true`면 전역 `body` 리셋과 `min-height: 100vh`를 생략하고, `p-*` 인터랙션 attribute를 fragment에 **보존**한다(기본 `false`면 제거).
 - 반환 `html` (string): `.canvas` 래퍼를 포함한 fragment HTML.
 - 반환 `css` (string): fragment에 적용할 CSS.
 
-### `renderFragment(source)`
+### `renderFragment(source, options?)`
 
 `preprocess` → 컴파일 → `.canvas` 래핑까지 수행한 fragment HTML을 만든다.
 
 - 매개변수 `source` (string): pug-frame 소스.
+- 매개변수 `options.keepInteractive` (boolean, 선택): `p-*` 인터랙션 attribute 보존 여부. 기본 `false` — 정적 출력용으로 제거한다. canvas 등 이를 해석하는 소비자만 `true`로 준다.
 - 반환 (string): `<div class="canvas">…</div>` fragment.
 
 ### `generateStyles(options?)`
@@ -87,7 +89,7 @@ pug-frame 문법을 표준 pug 소스로 변환한다. 들여쓰기는 보존하
 - `FRAME_TYPES` (FrameType[]): 프레임 키워드 배열.
 - `FrameType` (type): `"mobile" | "tablet" | "desktop"`.
 - `FrameSize` (type): `{ width: number; height: number }`.
-- `RenderOptions`, `RenderPartsOptions`, `RenderParts`, `StyleOptions` (type): 각 함수의 옵션/반환 형태.
+- `RenderOptions`, `RenderPartsOptions`, `RenderFragmentOptions`, `RenderParts`, `StyleOptions` (type): 각 함수의 옵션/반환 형태.
 
 ## 사용 예시
 
