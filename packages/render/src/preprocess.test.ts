@@ -49,15 +49,15 @@ describe("preprocess", () => {
   });
 
   it("한 줄 attribute와 텍스트를 함께 처리한다", () => {
-    expect(preprocess("button(focus='main-2') Next")).toBe(
-      "button(focus='main-2') Next",
+    expect(preprocess("button(p-focus='main-2') Next")).toBe(
+      "button(p-focus='main-2') Next",
     );
   });
 
   it("여러 줄 attribute 블록은 변환 없이 통과시킨다", () => {
     const input = [
       "        button(",
-      "            focus='main-2'",
+      "            p-focus='main-2'",
       "        ) Next",
     ].join("\n");
     expect(preprocess(input)).toBe(input);

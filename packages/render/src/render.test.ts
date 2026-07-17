@@ -57,9 +57,11 @@ describe("render", () => {
     expect(html).toContain('id="main-1"');
   });
 
-  it("focus attribute를 요소에 렌더한다", () => {
-    const html = render("mobile\n    body\n        button(focus='main-2') Next");
-    expect(html).toContain('focus="main-2"');
+  it("정적 출력에서 p-* 인터랙션 attribute를 제거한다", () => {
+    const html = render(
+      "mobile\n    body\n        button(p-focus='main-2') Next",
+    );
+    expect(html).not.toContain("p-focus");
     expect(html).toContain(">Next</button>");
   });
 });
@@ -78,6 +80,20 @@ describe("renderParts", () => {
     );
     expect(renderParts(TWO_SCREENS, { embedded: false }).css).toContain(
       "100vh",
+    );
+  });
+
+  it("embedded일 때는 p-* attribute를 보존한다", () => {
+    const source = "mobile\n    body\n        button(p-focus='main-2') Next";
+    expect(renderParts(source, { embedded: true }).html).toContain(
+      'p-focus="main-2"',
+    );
+  });
+
+  it("embedded가 아니면 p-* attribute를 제거한다", () => {
+    const source = "mobile\n    body\n        button(p-focus='main-2') Next";
+    expect(renderParts(source, { embedded: false }).html).not.toContain(
+      "p-focus",
     );
   });
 });
