@@ -5,7 +5,8 @@ const sample = `mobile#main-1
         div "Rescene"
     body
         div "Ilsan!"
-        button(focus='main-2') "Next"
+        button(p-focus='main-2') "Next"
+        div(p-tooltip='다음 화면으로 이동합니다') "?"
     footer
         div "2026.07.07"
 
@@ -14,7 +15,8 @@ mobile#main-2
         div "Rescene"
     body
         div "Yaho!"
-        button(focus='main-1') "Prev"
+        button(p-focus='main-1') "Prev"
+        div(p-tooltip='이전 화면으로 돌아갑니다') "?"
     footer
         div "2026.07.07"
 `;
