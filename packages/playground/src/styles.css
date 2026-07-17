@@ -65,6 +65,51 @@ body {
   background: #f5f5f5;
 }
 
+/* 리셋 트리거에 hover/focus 하면 열리는 데모 선택 드롭다운. */
+.demo-menu {
+  position: relative;
+}
+
+.demo-menu-list {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin: 4px 0 0;
+  padding: 4px;
+  list-style: none;
+  min-width: 100%;
+  display: none;
+  flex-direction: column;
+  gap: 2px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  z-index: 10;
+}
+
+/* 트리거와 메뉴 사이 hover 유실을 막기 위해 :hover 뿐 아니라 :focus-within 도 연다. */
+.demo-menu:hover .demo-menu-list,
+.demo-menu:focus-within .demo-menu-list {
+  display: flex;
+}
+
+.demo-menu-list button {
+  width: 100%;
+  padding: 6px 12px;
+  font-size: 13px;
+  text-align: left;
+  white-space: nowrap;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  cursor: pointer;
+}
+
+.demo-menu-list button:hover {
+  background: #f5f5f5;
+}
+
 .app-body {
   flex: 1 1 auto;
   min-height: 0;

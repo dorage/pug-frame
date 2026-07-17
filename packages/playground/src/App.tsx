@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { CodeEditor } from "./components/CodeEditor";
 import { CanvasPane } from "./components/CanvasPane";
-import { DEFAULT_SAMPLE } from "./sample";
+import { DEFAULT_SAMPLE, DEMOS } from "./sample";
 import { buildShareUrl, readSourceFromUrl, writeSourceToUrl } from "./lib/urlState";
 
 const DEBOUNCE_MS = 300;
@@ -38,6 +38,7 @@ export function App() {
     copyTimer.current = window.setTimeout(() => setCopied(false), 1500);
   };
 
+  // 리셋(트리거 직접 클릭)은 기존과 동일하게 기본 데모로 되돌린다.
   const handleReset = () => setSource(DEFAULT_SAMPLE);
 
   return (
@@ -47,9 +48,29 @@ export function App() {
           pug-frame <span className="app-title-accent">playground</span>
         </h1>
         <div className="app-actions">
-          <button type="button" onClick={handleReset}>
-            리셋
-          </button>
+          <div className="demo-menu">
+            <button
+              type="button"
+              className="demo-menu-trigger"
+              aria-haspopup="menu"
+              onClick={handleReset}
+            >
+              리셋 <span aria-hidden="true">▾</span>
+            </button>
+            <ul className="demo-menu-list" role="menu">
+              {DEMOS.map((demo) => (
+                <li key={demo.key} role="none">
+                  <button
+                    type="button"
+                    role="menuitem"
+                    onClick={() => setSource(demo.source)}
+                  >
+                    {demo.label}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
           <button type="button" onClick={handleShare}>
             {copied ? "복사됨!" : "URL 복사"}
           </button>
