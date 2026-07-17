@@ -47,17 +47,33 @@ Pointer Events로 마우스와 터치를 통합 처리한다.
 - 핀치 줌: 두 포인터의 거리 변화로 두 포인터 중점을 기준으로 줌한다.
 - 휠 줌: 커서 아래 지점을 고정한 채 줌한다(`WHEEL_ZOOM_INTENSITY = 0.0015`).
 - 물리 버튼: 줌 인 / 줌 아웃 / 리셋. 버튼 줌 배율은 `BUTTON_ZOOM_STEP = 1.2`이며 캔버스 중심을 기준으로 한다.
-- 클릭(탭): 움직임이 `CLICK_MOVE_THRESHOLD = 5`px 미만인 단일 포인터를 클릭으로 보고 focus를 처리한다(드래그와 구분).
+- 클릭(탭): 움직임이 `CLICK_MOVE_THRESHOLD = 5`px 미만인 단일 포인터를 클릭으로 보고 `p-*` 인터랙션 attribute(`p-focus` 등)를 처리한다(드래그와 구분).
 
-## focus
+## p-attribute 처리
 
-`focus` attribute를 가진 요소를 클릭하면 그 값(id)을 가진 요소로 카메라를 이동한다.
+`p-`로 시작하는 pug-frame 전용 인터랙션 attribute는 canvas 내부의 **레지스트리**(`src/pAttributes.ts`)로 처리한다. 각 핸들러(`p-focus`, `p-tooltip`)는 Shadow에 주입할 CSS와 탭/바깥탭 동작을 제공하며, canvas는 접두 `p-`만 알고 이름별 분기는 레지스트리에 위임한다. 핸들러가 주입하는 스타일은 모두 Shadow 내부에 들어가 stage transform과 함께 줌에 비례해 스케일된다.
 
-- 트리거: `button(focus='main-2')`처럼 `focus="<id>"`를 가진 요소(또는 그 조상)를 클릭.
+새 인터랙션 attribute를 추가하려면 `pAttributes.ts`에 `PAttrHandler`를 만들어 `pAttrHandlers` 목록에 넣으면 된다.
+
+## p-focus
+
+`p-focus` attribute를 가진 요소를 클릭하면 그 값(id)을 가진 요소로 카메라를 이동한다.
+
+- 트리거: `button(p-focus='main-2')`처럼 `p-focus="<id>"`를 가진 요소(또는 그 조상)를 클릭.
 - 카메라: 줌을 기본값 1로 되돌리고, 대상 요소를 뷰포트 중앙에 정렬한다(`Camera.focusOn`).
 - 표시: focus된 요소에 붉은 outline과 id 라벨(좌상단 바깥)을 붙인다. 이 스타일은 Shadow 내부에 주입되므로 줌에 따라 스케일되어 항상 요소 크기와 일치한다. 프레임이 focus되면 기본 검은 id 라벨은 감추고 붉은 라벨만 남긴다.
 - 해제: focus된 요소 바깥(다른 프레임·회색 배경 등)을 클릭하면 focus가 취소된다.
 - 대상 id는 렌더 시점의 Shadow 안에서 찾는다. 새로 `render()`하면 focus 상태는 초기화된다.
+
+## p-tooltip
+
+`p-tooltip` attribute를 가진 요소에 마커와 말풍선을 붙인다.
+
+- 마커: 요소의 **바깥쪽 오른쪽 상단**에 `*`를 항상 표시한다(`::before`).
+- 표시: 요소에 마우스를 올리면(`:hover`) 또는 터치로 탭하면 attribute 값을 요소 위쪽 말풍선(`::after`, `content: attr(p-tooltip)`)으로 보여준다.
+- 터치: 탭하면 말풍선이 토글되고(`.pf-tooltip-open`), 바깥을 탭하면 닫힌다.
+- 마커·말풍선 스타일도 Shadow 내부에 주입되어 줌에 따라 스케일된다.
+- 참고: 마커/말풍선이 `::before`/`::after`를 사용하므로, 같은 요소가 프레임 id 라벨이나 focus 라벨과 겹치면 표시가 충돌할 수 있다(드문 조합).
 
 ## `Camera`
 
