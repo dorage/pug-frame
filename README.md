@@ -46,27 +46,27 @@ npx nx run-many -t test    # 전체 테스트
 ```pug-frame
 mobile#main-1
     header
-        div "Rescene"
+        div Rescene
     body
-        div "Ilsan!"
-        button(p-focus='main-2') "Next"
-        div(p-tooltip='다음 화면으로 이동합니다') "?"
+        div Ilsan!
+        button(p-focus='main-2') Next
+        div(p-tooltip='다음 화면으로 이동합니다') ?
     footer
-        div "2026.07.07"
+        div 2026.07.07
 
 mobile#main-2
     header
-        div "Rescene"
+        div Rescene
     body
-        div "Yaho!"
-        button(p-focus='main-1') "Prev"
+        div Yaho!
+        button(p-focus='main-1') Prev
     footer
-        div "2026.07.07"
+        div 2026.07.07
 ```
 
 - 들여쓰기 기반 중첩(Pug와 동일).
 - 최상위 블록 하나가 화면 하나. 문서에 여러 개를 둘 수 있다.
-- `div "텍스트"`처럼 따옴표로 요소 텍스트를 지정한다.
+- `div Rescene`처럼 표준 Pug 문법으로 요소 텍스트를 지정한다.
 - `mobile#main-1`로 프레임에 id를 붙이고, `button(p-focus='main-2')`처럼 `p-focus`를 지정하면 클릭 시 해당 id로 카메라가 포커스된다.
 - `p-`로 시작하는 attribute는 pug-frame 전용 인터랙션 기능이다(`p-focus`, `p-tooltip` 등). canvas 뷰어에서만 해석되며 정적 HTML 출력에서는 제거된다.
 

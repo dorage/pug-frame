@@ -3,21 +3,21 @@ import { render, renderParts } from "./render.js";
 
 const TWO_SCREENS = `mobile
     header
-        div "Rescene"
+        div Rescene
     body
-        div "Ilsan!"
-        button "Next"
+        div Ilsan!
+        button Next
     footer
-        div "2026.07.07"
+        div 2026.07.07
 
 mobile
     header
-        div "Rescene"
+        div Rescene
     body
-        div "Yaho!"
-        button "Prev"
+        div Yaho!
+        button Prev
     footer
-        div "2026.07.07"
+        div 2026.07.07
 `;
 
 describe("render", () => {
@@ -33,11 +33,10 @@ describe("render", () => {
     expect(html.match(/class="frame frame--mobile"/g)).toHaveLength(2);
   });
 
-  it("따옴표 텍스트를 요소 내용으로 렌더한다", () => {
+  it("텍스트를 요소 내용으로 렌더한다", () => {
     const html = render(TWO_SCREENS);
     expect(html).toContain("Rescene");
     expect(html).toContain("Ilsan!");
-    expect(html).not.toContain('"Rescene"');
   });
 
   it("버튼을 button 요소로 렌더한다", () => {

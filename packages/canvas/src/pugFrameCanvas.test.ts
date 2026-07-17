@@ -3,7 +3,7 @@ import { pugFrameCanvas } from "./pugFrameCanvas";
 
 const SAMPLE = `mobile
     body
-        div "Hi"
+        div Hi
 `;
 
 /** stage 요소(shadowRoot를 가진 자식)를 찾아 shadow 내부 HTML을 반환한다. */
@@ -53,8 +53,8 @@ describe("pugFrameCanvas", () => {
   });
 
   it("render 인자가 생성자 options.pugframe보다 우선한다", async () => {
-    const canvas = pugFrameCanvas(host, { pugframe: 'mobile\n    body\n        div "옵션"' });
-    await canvas.render('mobile\n    body\n        div "인자"');
+    const canvas = pugFrameCanvas(host, { pugframe: "mobile\n    body\n        div 옵션" });
+    await canvas.render("mobile\n    body\n        div 인자");
     expect(shadowHtml(host)).toContain("인자");
     expect(shadowHtml(host)).not.toContain("옵션");
   });
@@ -102,7 +102,7 @@ describe("pugFrameCanvas", () => {
   it("embedded 렌더라 p-* attribute를 shadow에 보존한다", async () => {
     const canvas = pugFrameCanvas(host);
     await canvas.render(
-      'mobile\n    body\n        div(p-tooltip="설명") "Hi"',
+      'mobile\n    body\n        div(p-tooltip="설명") Hi',
     );
     expect(shadowHtml(host)).toContain('p-tooltip="설명"');
   });
