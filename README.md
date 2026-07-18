@@ -36,10 +36,12 @@ NX 모노레포로 구성되며, 모든 패키지는 `packages/*`에 있고 `@pu
 ## 시작하기
 
 ```bash
-npm install
+npm install                # 또는 pnpm install
 npx nx run-many -t build   # 전체 빌드
 npx nx run-many -t test    # 전체 테스트
 ```
+
+- npm(workspaces)과 pnpm(`pnpm-workspace.yaml`) 둘 다 지원합니다. 한 저장소에서는 하나만 골라 사용하세요.
 
 - CLI 실행: `npx nx run cli:dev -- examples/first.pf` (자세한 사용법은 [cli 문서](./docs/cli.md)).
 - canvas 데모: `npx nx run canvas:dev` 후 브라우저에서 확인.
