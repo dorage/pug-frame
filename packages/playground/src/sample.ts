@@ -24,10 +24,11 @@ export const DEFAULT_SAMPLE = `mobile#el-basic
             h4 H4 제목
             h5 H5 제목
             h6 H6 제목
-    footer.flex.gap-2
-        button(p-focus='el-controls') 컨트롤
-        button(p-focus='el-date') 날짜
-        button(p-focus='el-scroll') 스크롤
+    footer.flex.gap-1
+        button.active.flex-1(p-focus='el-basic') 기본
+        button.flex-1(p-focus='el-controls') 컨트롤
+        button.flex-1(p-focus='el-date') 날짜
+        button.flex-1(p-focus='el-scroll') 스크롤
 
 mobile#el-controls
     header
@@ -51,9 +52,11 @@ mobile#el-controls
         section.flex.items-center.gap-2
             spinner
             div.text-small 불러오는 중…
-    footer.flex.gap-2
-        button(p-focus='el-basic') 기본
-        button(p-focus='el-date') 날짜
+    footer.flex.gap-1
+        button.flex-1(p-focus='el-basic') 기본
+        button.active.flex-1(p-focus='el-controls') 컨트롤
+        button.flex-1(p-focus='el-date') 날짜
+        button.flex-1(p-focus='el-scroll') 스크롤
 
 mobile#el-date
     header
@@ -62,9 +65,11 @@ mobile#el-date
         calendar(p-date='2026-07-16')
         monthpick(p-month='2026-07')
         yearpick(p-year='2026')
-    footer.flex.gap-2
-        button(p-focus='el-basic') 기본
-        button(p-focus='el-scroll') 스크롤
+    footer.flex.gap-1
+        button.flex-1(p-focus='el-basic') 기본
+        button.flex-1(p-focus='el-controls') 컨트롤
+        button.active.flex-1(p-focus='el-date') 날짜
+        button.flex-1(p-focus='el-scroll') 스크롤
 
 mobile#el-scroll
     header
@@ -81,11 +86,16 @@ mobile#el-scroll
             image.h-24
             image.h-24
             image.h-24
+        div.text-small 내비게이션
+        navigation
     nav.flex.justify-around
         circle(p-icon='house')
         circle(p-icon='search')
         circle(p-icon='bell')
         circle(p-icon='user')
-    footer
-        navigation
+    footer.flex.gap-1
+        button.flex-1(p-focus='el-basic') 기본
+        button.flex-1(p-focus='el-controls') 컨트롤
+        button.flex-1(p-focus='el-date') 날짜
+        button.active.flex-1(p-focus='el-scroll') 스크롤
 `;

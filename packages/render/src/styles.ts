@@ -371,5 +371,12 @@ button {
   font: inherit;
   cursor: pointer;
 }
+
+/* 선택된 탭/버튼 표시: 반전(흰 배경 + 검은 테두리). */
+button.active {
+  background: #fff;
+  color: #000;
+  box-shadow: inset 0 0 0 2px #000;
+}
 `.trim();
 }

@@ -95,6 +95,7 @@ Tailwind 없이도 항상 동작하는 최소 유틸리티(정적 출력·canvas
 
 - `.flex` → `display: flex`
 - `.text-small` → `font-size: 12px`
+- `button.active` → 선택된 탭/버튼 표시(반전: 흰 배경 + 검은 테두리). 예: 하단 탭 바에서 현재 화면 버튼에 `.active`.
 
 그 외 임의의 **Tailwind 유틸리티 클래스**는 canvas 뷰어에서 런타임에 생성·주입된다(예: `flex-col`, `gap-4`, `items-center`, `bg-blue-500`). 정적 HTML 출력에는 포함되지 않는다. 자세한 내용은 [canvas 문서](./canvas.md#tailwind-런타임-유틸리티) 참고.
 
