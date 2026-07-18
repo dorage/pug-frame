@@ -7,7 +7,7 @@
 ## 구성
 
 - **왼쪽 (에디터)** — CodeMirror 6 기반 코드 편집기. Pug 레거시 모드로 근사 문법 하이라이팅을 제공한다.
-- **오른쪽 (미리보기)** — `@pug-frame/canvas` 의 `pugFrameCanvas` 뷰어를 그대로 임베드한다. 드래그로 팬, 휠/핀치로 줌, 우하단 버튼으로 조작하며 `p-focus`·`p-tooltip` 등 인터랙션 attribute 도 동작한다.
+- **오른쪽 (미리보기)** — `@pug-frame/canvas` 의 `pugFrameCanvas` 뷰어를 그대로 임베드한다. 드래그로 팬, 휠/핀치로 줌, 우하단 버튼으로 조작하며 `p-focus`·`p-tooltip`·`p-icon`·`p-scrollbar` attribute 와 Tailwind 유틸리티 클래스도 동작한다. 기본 샘플이 이 기능들을 함께 보여준다.
 - **상단 헤더** — `리셋`(기본 샘플로 되돌리기), `URL 복사`(현재 코드가 담긴 공유 URL 을 클립보드로 복사).
 
 ## 실행

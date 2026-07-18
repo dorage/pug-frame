@@ -22,3 +22,7 @@ declare module "pug-runtime/wrap.js" {
   ) => (locals?: Record<string, unknown>) => string;
   export default wrap;
 }
+
+// lucide-static은 `types` 필드가 없으므로 최소 선언만 둔다.
+// (이름별 PascalCase SVG 문자열 export를 런타임에 동적으로 조회한다)
+declare module "lucide-static";

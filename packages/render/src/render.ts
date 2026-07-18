@@ -1,6 +1,8 @@
 import { compilePug } from "./compile.js";
+import { resolveIcons } from "./icons.js";
 import { preprocess } from "./preprocess.js";
 import { generateStyles } from "./styles.js";
+import { resolveWidgets } from "./widgets.js";
 
 export interface RenderOptions {
   /** HTML <title>에 사용할 제목 */
@@ -60,9 +62,11 @@ export function renderFragment(
 ): string {
   const pugSource = preprocess(source);
   const compiled = compilePug(pugSource);
+  // p-icon/위젯은 컨텐츠 지시자이므로 attribute 제거 전에 내부 마크업을 생성한다(정적/canvas 공통).
+  const withContent = resolveWidgets(resolveIcons(compiled));
   const fragment = options.keepInteractive
-    ? compiled
-    : stripInteractiveAttrs(compiled);
+    ? withContent
+    : stripInteractiveAttrs(withContent);
   return `<div class="canvas">${fragment}</div>`;
 }
 

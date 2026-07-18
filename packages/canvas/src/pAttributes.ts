@@ -139,8 +139,93 @@ const tooltipHandler: PAttrHandler = {
   },
 };
 
+/** 스크롤바 트랙/thumb 두께(px). Tailwind w-4/h-4(=1rem) 상당. */
+const SCROLLBAR_SIZE = "16px";
+
+/** 스크롤바 트랙 공통: border + 도트무늬 배경으로 스크롤바임을 알아보게 한다. */
+const SCROLLBAR_TRACK = `
+  content: "";
+  position: absolute;
+  border: 1px solid #000;
+  background-color: #fff;
+  background-image: radial-gradient(#999 1px, transparent 1px);
+  background-size: 4px 4px;
+  pointer-events: none;`;
+
+/**
+ * 가로/세로 스크롤 "모양"을 UI 요소로 그린다(실제 제스처 스크롤은 지원하지 않음).
+ * 컨텐츠는 잘리고(overflow:hidden), 요소 가장자리에 스크롤바 트랙과 thumb가 보인다.
+ *
+ * 구조(세로 기준):
+ *   요소(position:relative, overflow:hidden)
+ *     ::before = 오른쪽 세로 트랙(border + 도트무늬)
+ *     ::after  = 트랙 위 아래쪽 절반을 채우는 검은 thumb
+ * 축마다 트랙(::before)+thumb(::after) 두 pseudo-element를 쓰므로, 한 요소는 한
+ * 축(x 또는 y)만 사용한다.
+ */
+const SCROLLBAR_STYLE = `
+[p-scrollbar-x],
+[p-scrollbar-y] {
+  position: relative;
+  overflow: hidden;
+}
+/* 세로 스크롤바 트랙: 오른쪽 세로 띠(폭 ${SCROLLBAR_SIZE}) */
+[p-scrollbar-y]::before {${SCROLLBAR_TRACK}
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: ${SCROLLBAR_SIZE};
+}
+/* 세로 스크롤바 thumb: 트랙 아래쪽 50% */
+[p-scrollbar-y]::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: ${SCROLLBAR_SIZE};
+  height: 50%;
+  background: #000;
+  pointer-events: none;
+}
+/* 가로 스크롤바 트랙: 아래쪽 가로 띠(높이 ${SCROLLBAR_SIZE}) */
+[p-scrollbar-x]::before {${SCROLLBAR_TRACK}
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: ${SCROLLBAR_SIZE};
+}
+/* 가로 스크롤바 thumb: 트랙 왼쪽 50% */
+[p-scrollbar-x]::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 50%;
+  height: ${SCROLLBAR_SIZE};
+  background: #000;
+  pointer-events: none;
+}
+`;
+
+/** 가로 스크롤 영역 핸들러(CSS 전용). */
+const scrollbarXHandler: PAttrHandler = {
+  name: "scrollbar-x",
+  style: SCROLLBAR_STYLE,
+};
+
+/** 세로 스크롤 영역 핸들러(CSS 전용). 스타일은 x 핸들러가 함께 제공한다. */
+const scrollbarYHandler: PAttrHandler = {
+  name: "scrollbar-y",
+  style: "",
+};
+
 /** 등록된 p-attribute 핸들러 목록. canvas가 이 순서로 디스패치한다. */
-export const pAttrHandlers: PAttrHandler[] = [focusHandler, tooltipHandler];
+export const pAttrHandlers: PAttrHandler[] = [
+  focusHandler,
+  tooltipHandler,
+  scrollbarXHandler,
+  scrollbarYHandler,
+];
 
 /** 모든 핸들러가 주입할 CSS를 하나로 합친다. */
 export function pAttrStyles(): string {

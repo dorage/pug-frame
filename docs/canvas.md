@@ -51,7 +51,7 @@ Pointer Events로 마우스와 터치를 통합 처리한다.
 
 ## p-attribute 처리
 
-`p-`로 시작하는 pug-frame 전용 인터랙션 attribute는 canvas 내부의 **레지스트리**(`src/pAttributes.ts`)로 처리한다. 각 핸들러(`p-focus`, `p-tooltip`)는 Shadow에 주입할 CSS와 탭/바깥탭 동작을 제공하며, canvas는 접두 `p-`만 알고 이름별 분기는 레지스트리에 위임한다. 핸들러가 주입하는 스타일은 모두 Shadow 내부에 들어가 stage transform과 함께 줌에 비례해 스케일된다.
+`p-`로 시작하는 pug-frame 전용 인터랙션 attribute는 canvas 내부의 **레지스트리**(`src/pAttributes.ts`)로 처리한다. 각 핸들러(`p-focus`, `p-tooltip`, `p-scrollbar-x`, `p-scrollbar-y`)는 Shadow에 주입할 CSS와(있다면) 탭/바깥탭 동작을 제공하며, canvas는 접두 `p-`만 알고 이름별 분기는 레지스트리에 위임한다. `p-scrollbar-*`처럼 `onTap`이 없는 CSS 전용 핸들러도 둘 수 있다. 핸들러가 주입하는 스타일은 모두 Shadow 내부에 들어가 stage transform과 함께 줌에 비례해 스케일된다.
 
 새 인터랙션 attribute를 추가하려면 `pAttributes.ts`에 `PAttrHandler`를 만들어 `pAttrHandlers` 목록에 넣으면 된다.
 
@@ -74,6 +74,27 @@ Pointer Events로 마우스와 터치를 통합 처리한다.
 - 터치: 탭하면 말풍선이 토글되고(`.pf-tooltip-open`), 바깥을 탭하면 닫힌다.
 - 마커·말풍선 스타일도 Shadow 내부에 주입되어 줌에 따라 스케일된다.
 - 참고: 마커/말풍선이 `::before`/`::after`를 사용하므로, 같은 요소가 프레임 id 라벨이나 focus 라벨과 겹치면 표시가 충돌할 수 있다(드문 조합).
+
+## p-scrollbar-x / p-scrollbar-y
+
+`p-scrollbar-x` / `p-scrollbar-y` attribute를 가진 요소에 스크롤바를 **UI 요소로 그린다**(CSS 전용 핸들러).
+
+- 스타일: 요소를 `position: relative; overflow: hidden`으로 만들고, 트랙과 thumb를 pseudo-element로 그린다.
+  - 트랙(`::before`): 스크롤바 띠에 `border: 1px solid #000`과 도트무늬 배경(`radial-gradient`)을 넣어 스크롤바임을 알아보게 한다. 세로는 오른쪽 세로 띠, 가로는 아래쪽 가로 띠(두께 16px).
+  - thumb(`::after`): 트랙 위에 검은색으로 채운다. 세로는 트랙 아래쪽 50%, 가로는 트랙 왼쪽 50%.
+  - 축마다 트랙+thumb 두 pseudo-element를 쓰므로 **한 요소는 한 축(x 또는 y)만** 사용한다.
+- 용도: 스크롤 가능 영역임을 와이어프레임 UI로 표현한다(컨텐츠는 잘림).
+- **제약(설계상 확정)**: 실제 **제스처 스크롤은 지원하지 않는다**. canvas가 wheel(줌)·pointer(팬)을 가로채기도 하고, 목적 자체가 "스크롤바 모양"만 보여주는 것이다. thumb는 `pointer-events: none`으로 팬/클릭을 통과시킨다.
+
+## Tailwind 런타임 유틸리티
+
+렌더된 소스에 쓰인 임의의 Tailwind 유틸리티 클래스를 런타임에 생성해 Shadow DOM에 주입한다.
+
+- 동작: `render()`가 렌더된 HTML에서 `class` 토큰을 수집하고, Tailwind v4 컴파일러(`src/tailwind.ts`)로 해당 유틸리티 CSS만 생성한 뒤 `generateStyles()`·`pAttrStyles()` **뒤에** 주입한다. 동일 specificity에서 소스 순서로 유틸리티가 기본 스타일을 이긴다.
+- Shadow 격리: 전역 Tailwind는 Shadow에 침투하지 못하므로 반드시 Shadow 내부에 주입한다. Tailwind가 방출하는 `:root, :host { --색상/간격 변수 }` 덕분에 Shadow 안에서도 테마 변수가 정의된다.
+- preflight(전역 리셋)는 제외해 프레임/요소 기본 스타일을 건드리지 않는다.
+- 기본 테마(`theme.css`)는 `vite.config`의 `tailwindThemePlugin`이 `virtual:tailwind-theme` 가상 모듈로 제공한다(`?raw`가 CSS 특수 처리로 빈 문자열이 되는 문제를 우회).
+- 정적 HTML 출력(CLI `render`)에는 Tailwind 유틸리티가 포함되지 않는다(canvas 전용).
 
 ## `Camera`
 

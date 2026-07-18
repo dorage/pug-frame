@@ -19,6 +19,7 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "lucide-static": "^1.25.0",
     "pug-code-gen": "^3.0.3",
     "pug-lexer": "^5.0.1",
     "pug-linker": "^4.0.0",
