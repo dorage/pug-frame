@@ -1,0 +1,11 @@
+packages:
+  - "packages/*"
+  - "plugins/*"
+
+# npm workspaces와 동일하게, 버전이 일치하는 내부 패키지를 레지스트리 대신 워크스페이스에서 링크
+linkWorkspacePackages: true
+
+# postinstall(바이너리 설치)이 필요한 의존성만 빌드 스크립트 실행 허용
+onlyBuiltDependencies:
+  - esbuild
+  - nx
