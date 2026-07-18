@@ -31,8 +31,8 @@ Pug 위에 pug-frame이 추가로 부여하는 의미다.
 - 표기: `요소(p-<기능>='<값>')`. 예: `button(p-focus='main-2')`, `div(p-tooltip='설명')`.
 - 값 자체는 표준 Pug attribute 문법이다.
 - **인터랙션** attribute(`p-focus`, `p-tooltip`, `p-scrollbar-x`, `p-scrollbar-y`)는 `@pug-frame/canvas` 뷰어에서만 해석되며, 정적 HTML 출력(예: CLI `render`)에서는 **제거**되어 표준 마크업만 남는다.
-- **컨텐츠** attribute(`p-icon`)는 렌더 단계에서 실제 내용(인라인 SVG)으로 치환되므로 정적 출력에도 남는다.
-- 현재 지원: `p-focus`, `p-tooltip`, `p-icon`, `p-scrollbar-x`, `p-scrollbar-y`.
+- **컨텐츠** attribute(`p-icon`, 그리고 위젯 값 `p-date`/`p-month`/`p-year`/`p-star`/`p-progress`/`p-on`)는 렌더 단계에서 실제 내용/상태로 반영되므로 정적 출력에도 결과가 남는다(attribute 자체는 제거).
+- 현재 지원: `p-focus`, `p-tooltip`, `p-icon`, `p-scrollbar-x`, `p-scrollbar-y`, 그리고 값 기반 위젯용 `p-date`/`p-month`/`p-year`/`p-star`/`p-progress`/`p-on`. 위젯 요소 목록은 [elements 문서](./elements.md) 참고.
 
 ### p-focus
 
@@ -73,10 +73,12 @@ Pug 위에 pug-frame이 추가로 부여하는 의미다.
 
 ### 기본 와이어프레임 요소
 
-자주 쓰는 자리표시자를 짧은 키워드로 제공한다. 각 키워드는 `.pf-*` 클래스가 붙은 div로 매핑된다.
+자주 쓰는 자리표시자·위젯을 짧은 키워드로 제공한다. 대부분 `.pf-*` 클래스가 붙은 div로 매핑된다. 전체 목록과 각 매핑은 [elements 문서](./elements.md)를 참고한다.
 
-- `circle` → `div.pf-circle`. 원형 아바타 자리표시자(48×48, 정원 테두리). `p-icon`과 함께 아이콘 아바타로 자주 쓴다.
-- `image` → `div.pf-image`. 회색 이미지 박스 자리표시자(대각선 표시).
+- 자리표시자: `circle`(원형 아바타), `image`(이미지 박스), `video`(비디오 박스), `search`(검색 바), `navigation`(하단 탭 바), `spinner`(로딩).
+- 드롭다운: `dropdown` + `item`.
+- 제목·링크: `h1`~`h6`(표준 태그), `link`(→ `<a>`, 실제 `a`와 동일 스타일).
+- 값 기반 위젯(아래 `p-*` 값으로 내부가 그려짐): `calendar`(p-date), `monthpick`(p-month), `yearpick`(p-year), `rating`(p-star), `progressbar`(p-progress), `toggle`(p-on), `checkbox`(p-on).
 
 ### 구조 키워드 (nav / main)
 

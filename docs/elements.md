@@ -32,15 +32,62 @@ pug-frame이 **기본으로 제공하는 요소·키워드·attribute·유틸리
 
 ## 요소 키워드
 
-자주 쓰는 와이어프레임 자리표시자. `.pf-*` 클래스 div로 매핑된다.
+자주 쓰는 와이어프레임 자리표시자·위젯. `.pf-*` 클래스 div로 매핑된다.
+
+### 자리표시자 (자기완결, 값 없음)
 
 - `circle` → `div.pf-circle`
   - 원형 아바타 자리표시자. 48 × 48, 정원 테두리, 내부 아이콘을 가운데 정렬.
   - `p-icon`과 함께 아이콘 아바타로 자주 쓴다: `circle(p-icon='user')`.
 - `image` → `div.pf-image`
   - 이미지 박스 자리표시자. 회색 배경 + 대각선 표시, 최소 64 × 64.
+- `video` → `div.pf-video`
+  - 비디오 박스 자리표시자. 회색 박스 + 가운데 재생 삼각형.
+- `search` → `div.pf-search`
+  - 검색 입력 바. 둥근 박스 + 돋보기 + 입력 자리표시 라인.
+- `navigation` → `div.pf-navigation`
+  - 하단 내비게이션 바. 균등 분할된 탭 느낌의 바.
+- `spinner` → `div.pf-spinner`
+  - 로딩 스피너. 회전하는 원호(CSS 애니메이션).
+
+### 드롭다운
+
+- `dropdown` → `div.pf-dropdown`
+  - 선택 박스. 라벨(트레일링 텍스트) + 아래 방향 캐럿을 표시하고 `item`들을 목록으로 담는다.
+- `item` → `div.pf-item`
+  - 드롭다운 항목 한 줄.
+
+```pug-frame
+dropdown 정렬선택
+    item 추천순
+    item 인기순
+```
 
 `section`은 유효한 HTML 태그라 매핑 없이 그대로 통과한다(중립 그룹). `section.flex`, `section(p-scrollbar-x)`처럼 쓴다.
+
+## 제목 · 링크
+
+- 제목: `h1` ~ `h6` (표준 HTML 태그, 그대로 통과). 레벨별 와이어프레임 크기가 적용된다.
+- 링크: `link` → `<a>`. 실제 `a` 태그와 **동일한 링크 스타일**(밑줄)을 받는다. `link(href='#') 더보기`처럼 쓴다.
+
+## 값 기반 위젯
+
+`p-*` 값을 읽어 내부 마크업이 render 단계에서 생성된다(`p-icon`처럼 정적/canvas 양쪽에 표시). 값이 없으면 기본값을 쓰고, 범위 밖 값은 clamp된다.
+
+- `calendar(p-date="YYYY-MM-DD")` → `div.pf-calendar`
+  - 해당 월의 달력 그리드. 지정일이 강조된다. `p-date`가 없으면 오늘.
+- `monthpick(p-month="YYYY-MM")` → `div.pf-monthpick`
+  - 12개월 선택 그리드. 지정 월 강조. 없으면 이번 달.
+- `yearpick(p-year="YYYY")` → `div.pf-yearpick`
+  - 선택 연도 주변 12년 그리드. 지정 연 강조. 없으면 올해.
+- `rating(p-star=N)` → `div.pf-rating`
+  - 별 5개 중 N개를 채운다. 범위 0~5로 clamp. 없으면 0.
+- `progressbar(p-progress=N)` → `div.pf-progress`
+  - 진행바 채움 폭 N%. 범위 0~100으로 clamp. 없으면 0.
+- `toggle(p-on)` → `div.pf-toggle`
+  - 토글 스위치. `p-on`이 있으면 on, 없으면 off.
+- `checkbox(p-on)` → `div.pf-checkbox`
+  - 체크박스. `p-on`이 있으면 체크, 없으면 해제.
 
 ## 기본 유틸리티 클래스
 
@@ -55,11 +102,15 @@ Tailwind 없이도 항상 동작하는 최소 유틸리티(정적 출력·canvas
 
 `p-`로 시작하는 pug-frame 전용 기능. 표기는 `요소(p-<기능>='<값>')`.
 
-### 컨텐츠 (정적 출력에도 남음)
+### 컨텐츠 (렌더 단계에서 마크업 생성, 정적 출력에도 남음)
 
 - `p-icon='<이름>'`
   - 요소 안에 [lucide](https://lucide.dev/icons/) 아이콘을 인라인 SVG로 넣는다. 이름은 kebab-case(예: `user`, `chevron-right`). 알 수 없는 이름은 점선 사각형 자리표시자.
-  - 렌더 단계에서 치환되므로 정적/canvas 양쪽에서 보인다.
+- 위젯 값 attribute — 위 [값 기반 위젯](#값-기반-위젯)이 해석한다.
+  - `p-date` / `p-month` / `p-year`: 달력·월·연 선택의 선택 값. 없으면 오늘/이번 달/올해.
+  - `p-star`: 별점(0~5, clamp). `p-progress`: 진행률(0~100, clamp).
+  - `p-on`: 토글·체크박스의 on 상태(값 없는 boolean).
+  - 이들은 렌더 단계에서 내부 마크업/상태로 반영되며, attribute 자체는 정적 출력에서 제거된다.
 
 ### 인터랙션 (canvas 전용, 정적 출력에서 제거됨)
 
