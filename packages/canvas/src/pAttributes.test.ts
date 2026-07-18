@@ -37,6 +37,17 @@ describe("pAttrHandlers", () => {
     expect(styles).toContain("[p-tooltip]::before");
     expect(styles).toContain("attr(p-tooltip)");
   });
+
+  it("scrollbar-x/y 핸들러를 등록하고 오버플로 스타일을 포함한다", () => {
+    expect(pAttrHandlers.map((h) => h.name)).toEqual(
+      expect.arrayContaining(["scrollbar-x", "scrollbar-y"]),
+    );
+    const styles = pAttrStyles();
+    expect(styles).toContain("[p-scrollbar-x]");
+    expect(styles).toContain("overflow-x: auto");
+    expect(styles).toContain("[p-scrollbar-y]");
+    expect(styles).toContain("overflow-y: auto");
+  });
 });
 
 describe("focus 핸들러", () => {

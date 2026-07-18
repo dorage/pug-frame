@@ -139,8 +139,43 @@ const tooltipHandler: PAttrHandler = {
   },
 };
 
+/**
+ * 가로/세로 스크롤 영역 스타일.
+ * 컨텐츠가 넘치면 잘리고 스크롤 어포던스를 보여준다.
+ *
+ * 주의: canvas는 wheel(줌)·pointer(팬) 제스처를 가로채므로 프레임 내부의 실제
+ * 제스처 스크롤은 동작하지 않을 수 있다. 지금은 오버플로 표현(잘림) 용도다.
+ */
+const SCROLLBAR_STYLE = `
+[p-scrollbar-x] {
+  overflow-x: auto;
+  max-width: 100%;
+}
+[p-scrollbar-y] {
+  overflow-y: auto;
+  max-height: 240px;
+}
+`;
+
+/** 가로 스크롤 영역 핸들러(CSS 전용). */
+const scrollbarXHandler: PAttrHandler = {
+  name: "scrollbar-x",
+  style: SCROLLBAR_STYLE,
+};
+
+/** 세로 스크롤 영역 핸들러(CSS 전용). 스타일은 x 핸들러가 함께 제공한다. */
+const scrollbarYHandler: PAttrHandler = {
+  name: "scrollbar-y",
+  style: "",
+};
+
 /** 등록된 p-attribute 핸들러 목록. canvas가 이 순서로 디스패치한다. */
-export const pAttrHandlers: PAttrHandler[] = [focusHandler, tooltipHandler];
+export const pAttrHandlers: PAttrHandler[] = [
+  focusHandler,
+  tooltipHandler,
+  scrollbarXHandler,
+  scrollbarYHandler,
+];
 
 /** 모든 핸들러가 주입할 CSS를 하나로 합친다. */
 export function pAttrStyles(): string {

@@ -7,6 +7,7 @@ import {
   pAttrStyles,
   type PAttrContext,
 } from "./pAttributes";
+import { generateTailwind } from "./tailwind";
 
 export interface PugFrameCanvasOptions {
   /** pug-frame 소스. URL 링크(http/https) 또는 pug-frame 컨텐츠. */
@@ -145,9 +146,12 @@ class PugFrameCanvasImpl implements PugFrameCanvas {
     try {
       const content = looksLikeUrl(source) ? await fetchText(source) : source;
       const { html, css } = renderParts(content, { embedded: true });
+      // 사용자가 쓴 Tailwind 유틸리티 CSS를 런타임에 생성한다.
+      // generateStyles 뒤에 두어 동일 specificity에서 유틸리티가 기본값을 이긴다.
+      const tailwindCss = await generateTailwind(html);
       // 새 컨텐츠로 교체되므로 이전 활성 상태(focus/tooltip 등)를 버린다.
       this.active.clear();
-      this.shadow.innerHTML = `<style>${css}\n${pAttrStyles()}</style>${html}`;
+      this.shadow.innerHTML = `<style>${css}\n${pAttrStyles()}\n${tailwindCss}</style>${html}`;
       this.hideFallback();
     } catch (error) {
       this.showFallback(
