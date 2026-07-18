@@ -79,7 +79,10 @@ Pointer Events로 마우스와 터치를 통합 처리한다.
 
 `p-scrollbar-x` / `p-scrollbar-y` attribute를 가진 요소에 스크롤바를 **UI 요소로 그린다**(CSS 전용 핸들러).
 
-- 스타일: 요소를 `position: relative; overflow: hidden`으로 만들고, thumb를 pseudo-element로 그린다. 세로는 `[p-scrollbar-y]::after`(오른쪽 세로 트랙 아래쪽 50%), 가로는 `[p-scrollbar-x]::before`(아래쪽 가로 트랙 왼쪽 50%). 트랙/thumb 두께는 16px, thumb는 검은색이다. x/y가 서로 다른 pseudo-element를 쓰므로 한 요소에 둘 다 붙어도 겹치지 않는다.
+- 스타일: 요소를 `position: relative; overflow: hidden`으로 만들고, 트랙과 thumb를 pseudo-element로 그린다.
+  - 트랙(`::before`): 스크롤바 띠에 `border: 1px solid #000`과 도트무늬 배경(`radial-gradient`)을 넣어 스크롤바임을 알아보게 한다. 세로는 오른쪽 세로 띠, 가로는 아래쪽 가로 띠(두께 16px).
+  - thumb(`::after`): 트랙 위에 검은색으로 채운다. 세로는 트랙 아래쪽 50%, 가로는 트랙 왼쪽 50%.
+  - 축마다 트랙+thumb 두 pseudo-element를 쓰므로 **한 요소는 한 축(x 또는 y)만** 사용한다.
 - 용도: 스크롤 가능 영역임을 와이어프레임 UI로 표현한다(컨텐츠는 잘림).
 - **제약(설계상 확정)**: 실제 **제스처 스크롤은 지원하지 않는다**. canvas가 wheel(줌)·pointer(팬)을 가로채기도 하고, 목적 자체가 "스크롤바 모양"만 보여주는 것이다. thumb는 `pointer-events: none`으로 팬/클릭을 통과시킨다.
 
