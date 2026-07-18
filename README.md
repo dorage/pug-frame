@@ -25,6 +25,7 @@ NX 모노레포로 구성되며, 모든 패키지는 `packages/*`에 있고 `@pu
 각 패키지의 API와 도메인 정보는 `docs/`에 있다.
 
 - [syntax](./docs/syntax.md) — pug-frame 문법. 기본은 Pug, 추가 문법(기본 요소 `circle`/`image`/`nav`/`main`, `p-focus`/`p-tooltip`/`p-icon`/`p-scrollbar` 등 `p-` attribute, 유틸리티/Tailwind)은 Additional Syntax.
+- [elements](./docs/elements.md) — 기본 제공 요소·키워드·`p-` attribute·유틸리티 목록(매핑 레퍼런스).
 - [render](./docs/render.md) — 렌더 API와 도메인 매핑. 다른 패키지의 기반이다.
 - [cli](./docs/cli.md) — `pug-frame` CLI 사용법과 옵션.
 - [canvas](./docs/canvas.md) — `pugFrameCanvas` API, 카메라/인터랙션.
