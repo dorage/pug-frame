@@ -25,6 +25,19 @@ describe("preprocess", () => {
   it("요소 키워드를 pf 클래스 div로 매핑한다", () => {
     expect(preprocess("circle")).toBe("div.pf-circle");
     expect(preprocess("image")).toBe("div.pf-image");
+    expect(preprocess("rating")).toBe("div.pf-rating");
+    expect(preprocess("calendar")).toBe("div.pf-calendar");
+    expect(preprocess("dropdown")).toBe("div.pf-dropdown");
+  });
+
+  it("link 키워드를 a 태그로 매핑한다", () => {
+    expect(preprocess("link 더보기")).toBe("a 더보기");
+    expect(preprocess("link(href='#')")).toBe("a(href='#')");
+  });
+
+  it("h1~h6 제목 태그는 그대로 통과시킨다", () => {
+    expect(preprocess("h1 제목")).toBe("h1 제목");
+    expect(preprocess("h6 소제목")).toBe("h6 소제목");
   });
 
   it("요소 키워드의 클래스/attribute 잔여부를 보존한다", () => {

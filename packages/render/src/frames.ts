@@ -40,12 +40,34 @@ export const SECTION_CLASSES: Record<string, string> = {
 /**
  * 와이어프레임 기본 요소 키워드 → 클래스 매핑.
  *
- * 자주 쓰는 자리표시자(원형 아바타, 이미지 박스)를 짧은 키워드로 제공한다.
- * 실제 스타일은 styles.ts의 `.pf-*` 규칙이 담당한다.
+ * 자주 쓰는 자리표시자·위젯을 짧은 키워드로 제공한다. 실제 스타일은 styles.ts의
+ * `.pf-*` 규칙이 담당한다. 값 기반 위젯(calendar/rating 등)은 render 단계의
+ * `resolveWidgets`가 `p-*` 값을 읽어 내부 마크업을 생성한다.
  */
 export const ELEMENT_CLASSES: Record<string, string> = {
   circle: "pf-circle",
   image: "pf-image",
+  video: "pf-video",
+  search: "pf-search",
+  navigation: "pf-navigation",
+  spinner: "pf-spinner",
+  progressbar: "pf-progress",
+  rating: "pf-rating",
+  toggle: "pf-toggle",
+  checkbox: "pf-checkbox",
+  calendar: "pf-calendar",
+  monthpick: "pf-monthpick",
+  yearpick: "pf-yearpick",
+  dropdown: "pf-dropdown",
+  item: "pf-item",
+};
+
+/**
+ * 요소 키워드 → 다른 HTML 태그 매핑(div가 아닌 경우).
+ * `link`은 `<a>`로 렌더해 실제 `a` 태그와 동일한 링크 스타일을 받는다.
+ */
+export const ELEMENT_TAGS: Record<string, string> = {
+  link: "a",
 };
 
 /**
@@ -60,8 +82,9 @@ const TAG_PATTERN = /^([A-Za-z][\w-]*)(.*)$/;
  * 선행 키워드만 매핑하고 `#id`/`.class`/`(attrs)` 등 pug 잔여부는 보존한다.
  * - 프레임 키워드(mobile 등): `div.frame.frame--{type}` + 잔여부
  * - 구조 키워드(header/nav/main/body/footer): `div.frame-{section}` + 잔여부
- * - 요소 키워드(circle/image): `div.pf-{element}` + 잔여부
- * - 그 외(div, button, section 등): 그대로 반환
+ * - 요소 키워드(circle/image/rating 등): `div.pf-{element}` + 잔여부
+ * - 태그 키워드(link): 다른 태그(`a`) + 잔여부
+ * - 그 외(div, button, section, h1~h6 등): 그대로 반환
  */
 export function mapTag(tag: string): string {
   const match = TAG_PATTERN.exec(tag);
@@ -76,6 +99,10 @@ export function mapTag(tag: string): string {
   const sectionClass = SECTION_CLASSES[keyword];
   if (sectionClass) {
     return `div.${sectionClass}${suffix}`;
+  }
+  const elementTag = ELEMENT_TAGS[keyword];
+  if (elementTag) {
+    return `${elementTag}${suffix}`;
   }
   const elementClass = ELEMENT_CLASSES[keyword];
   if (elementClass) {
