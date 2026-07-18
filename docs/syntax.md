@@ -26,12 +26,13 @@ Pug 위에 pug-frame이 추가로 부여하는 의미다.
 
 ### `p-` 인터랙션 attribute
 
-`p-`로 시작하는 attribute는 pug-frame **전용 인터랙션 기능**의 네임스페이스다.
+`p-`로 시작하는 attribute는 pug-frame **전용 기능**의 네임스페이스다.
 
 - 표기: `요소(p-<기능>='<값>')`. 예: `button(p-focus='main-2')`, `div(p-tooltip='설명')`.
-- 값 자체는 표준 Pug attribute 문법이지만, 동작은 `@pug-frame/canvas` 뷰어에서만 해석된다.
-- 정적 HTML 출력(예: CLI `render`)에서는 `p-*` attribute가 **제거**되어 표준 마크업만 남는다.
-- 현재 지원: `p-focus`, `p-tooltip`.
+- 값 자체는 표준 Pug attribute 문법이다.
+- **인터랙션** attribute(`p-focus`, `p-tooltip`, `p-scrollbar-x`, `p-scrollbar-y`)는 `@pug-frame/canvas` 뷰어에서만 해석되며, 정적 HTML 출력(예: CLI `render`)에서는 **제거**되어 표준 마크업만 남는다.
+- **컨텐츠** attribute(`p-icon`)는 렌더 단계에서 실제 내용(인라인 SVG)으로 치환되므로 정적 출력에도 남는다.
+- 현재 지원: `p-focus`, `p-tooltip`, `p-icon`, `p-scrollbar-x`, `p-scrollbar-y`.
 
 ### p-focus
 
@@ -52,6 +53,44 @@ Pug 위에 pug-frame이 추가로 부여하는 의미다.
 - 동작: 요소에 마우스를 올리거나(호버) 터치(탭)하면 attribute 값을 말풍선 오버레이로 보여준다. 터치는 탭으로 토글되며, 바깥을 탭하면 닫힌다.
 - 자세한 내용은 [canvas 문서](./canvas.md#p-tooltip)를 참고한다.
 
+### p-icon
+
+`p-icon` attribute를 가진 요소 안에 [lucide](https://lucide.dev/icons/) 아이콘을 인라인 SVG로 넣는다.
+
+- 표기: `요소(p-icon='<아이콘 이름>')`. 예: `circle(p-icon='user')`, `div(p-icon='chevron-right')`.
+- 이름: lucide의 kebab-case 이름을 그대로 쓴다. 알 수 없는 이름은 점선 사각형 자리표시자로 표시된다.
+- 치환은 **렌더 단계**에서 일어나므로 정적 HTML 출력과 canvas 양쪽에서 아이콘이 보인다(다른 인터랙션 `p-*`와 달리 제거되지 않는다).
+- SVG는 `stroke="currentColor"`이므로 텍스트 색(`color`)을 따른다. 크기는 기본 24×24다.
+
+### p-scrollbar-x / p-scrollbar-y
+
+`p-scrollbar-x` / `p-scrollbar-y` attribute를 가진 요소를 각각 가로/세로 스크롤 영역으로 만든다.
+
+- 표기: `section.flex(p-scrollbar-x)`처럼 값 없이 붙인다.
+- 컨텐츠가 넘치면 잘리고 스크롤 어포던스를 보여준다(가로: `overflow-x`, 세로: `overflow-y`).
+- canvas 전용이며 정적 출력에서는 제거된다. 자세한 내용과 제스처 관련 제약은 [canvas 문서](./canvas.md#p-scrollbar-x--p-scrollbar-y)를 참고한다.
+
+### 기본 와이어프레임 요소
+
+자주 쓰는 자리표시자를 짧은 키워드로 제공한다. 각 키워드는 `.pf-*` 클래스가 붙은 div로 매핑된다.
+
+- `circle` → `div.pf-circle`. 원형 아바타 자리표시자(48×48, 정원 테두리). `p-icon`과 함께 아이콘 아바타로 자주 쓴다.
+- `image` → `div.pf-image`. 회색 이미지 박스 자리표시자(대각선 표시).
+
+### 구조 키워드 (nav / main)
+
+프레임 내부 시맨틱 영역에 `nav`, `main`이 추가됐다. `header`/`body`/`footer`와 동일하게 클래스 div로 매핑된다.
+
+- `nav` → `div.frame-nav`.
+- `main` → `div.frame-main`(남는 세로 공간을 채움).
+
+### 기본 유틸리티 클래스 · Tailwind
+
+- pug-frame은 Tailwind 없이도 항상 동작하는 최소 유틸리티를 제공한다: `.flex`(display:flex), `.text-small`(작은 글자).
+- 그 외 클래스는 **Tailwind 유틸리티**로 canvas에서 런타임에 생성된다. 예: `main.flex.flex-col.gap-4`, `section.items-center.gap-3`, `div.bg-blue-500` 등 임의의 Tailwind 클래스를 쓸 수 있다.
+- Tailwind는 canvas 뷰어에서만 적용된다(Shadow DOM 안에서 생성·주입). 정적 HTML 출력에는 Tailwind 유틸리티가 포함되지 않는다.
+- `#id`/`.class`/`(attrs)` 순서는 표준 Pug를 따른다. 클래스는 attribute보다 **앞**에 온다: `section.flex.gap-2(p-scrollbar-x)`.
+
 ### 프레임 키워드
 
 들여쓰기 0의 프레임 키워드가 **새 화면 하나**를 시작한다. 한 문서에 여러 개를 둘 수 있다.
@@ -64,7 +103,7 @@ Pug 위에 pug-frame이 추가로 부여하는 의미다.
 
 프레임 내부의 시맨틱 영역을 나타낸다.
 
-- 키워드: `header`, `body`, `footer`.
+- 키워드: `header`, `nav`, `main`, `body`, `footer`.
 - 실제 `<header>`/`<body>`/`<footer>` 대신 클래스 div(`frame-header` 등)로 매핑된다. 중첩 `<body>`가 브라우저에서 무효 처리되는 것을 피하기 위함이다.
 
 ### 프레임 ID 표시
@@ -95,4 +134,28 @@ mobile#main-2
         button(p-focus='main-1') Prev
     footer
         div 2026.07.07
+```
+
+기본 요소·`p-icon`·`p-scrollbar`·유틸리티/Tailwind를 함께 쓴 예시:
+
+```pug-frame
+mobile#profile
+    nav.flex.items-center.justify-between
+        div 뒤로
+        div 프로필
+        circle(p-icon='settings')
+    main.flex.flex-col.gap-4
+        section.flex.items-center.gap-3
+            circle(p-icon='user')
+            .flex.flex-col
+                div 이강현
+                div.text-small 클로드코드 조련사
+        section.flex.gap-2(p-scrollbar-x)
+            section.flex.flex-col.gap-2(p-scrollbar-y)
+                image
+                image
+                image
+            div.text-small 2026.06.05 호수공원 사진들
+    footer.flex.justify-end
+        div.text-small 2026-07-18
 ```
