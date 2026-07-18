@@ -38,15 +38,18 @@ describe("pAttrHandlers", () => {
     expect(styles).toContain("attr(p-tooltip)");
   });
 
-  it("scrollbar-x/y 핸들러를 등록하고 오버플로 스타일을 포함한다", () => {
+  it("scrollbar-x/y 핸들러를 등록하고 스크롤바 thumb 스타일을 포함한다", () => {
     expect(pAttrHandlers.map((h) => h.name)).toEqual(
       expect.arrayContaining(["scrollbar-x", "scrollbar-y"]),
     );
     const styles = pAttrStyles();
-    expect(styles).toContain("[p-scrollbar-x]");
-    expect(styles).toContain("overflow-x: auto");
-    expect(styles).toContain("[p-scrollbar-y]");
-    expect(styles).toContain("overflow-y: auto");
+    // 세로/가로 thumb pseudo-element와 검은색 채움
+    expect(styles).toContain("[p-scrollbar-y]::after");
+    expect(styles).toContain("[p-scrollbar-x]::before");
+    expect(styles).toContain("background: #000");
+    // 컨텐츠는 잘리고 요소는 relative 기준이 된다
+    expect(styles).toContain("position: relative");
+    expect(styles).toContain("overflow: hidden");
   });
 });
 

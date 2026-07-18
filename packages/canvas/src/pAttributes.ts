@@ -139,21 +139,46 @@ const tooltipHandler: PAttrHandler = {
   },
 };
 
+/** 스크롤바 트랙/thumb 두께(px). Tailwind w-4/h-4(=1rem) 상당. */
+const SCROLLBAR_SIZE = "16px";
+
 /**
- * 가로/세로 스크롤 영역 스타일.
- * 컨텐츠가 넘치면 잘리고 스크롤 어포던스를 보여준다.
+ * 가로/세로 스크롤 "모양"을 UI 요소로 그린다(실제 제스처 스크롤은 지원하지 않음).
+ * 컨텐츠는 잘리고(overflow:hidden), 요소 가장자리에 스크롤바 thumb가 표시된다.
  *
- * 주의: canvas는 wheel(줌)·pointer(팬) 제스처를 가로채므로 프레임 내부의 실제
- * 제스처 스크롤은 동작하지 않을 수 있다. 지금은 오버플로 표현(잘림) 용도다.
+ * 구조(세로 기준):
+ *   요소(position:relative, overflow:hidden)
+ *     ::after = 오른쪽 세로 트랙의 아래쪽 절반을 채우는 검은 thumb
+ * 가로는 아래쪽 가로 트랙의 왼쪽 절반을 채우는 thumb로, x는 ::before / y는 ::after를
+ * 써서 한 요소에 둘 다 붙어도 겹치지 않게 한다.
  */
 const SCROLLBAR_STYLE = `
-[p-scrollbar-x] {
-  overflow-x: auto;
-  max-width: 100%;
-}
+[p-scrollbar-x],
 [p-scrollbar-y] {
-  overflow-y: auto;
-  max-height: 240px;
+  position: relative;
+  overflow: hidden;
+}
+/* 세로 스크롤바 thumb: 오른쪽 세로 트랙(폭 ${SCROLLBAR_SIZE})의 아래쪽 50% */
+[p-scrollbar-y]::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: ${SCROLLBAR_SIZE};
+  height: 50%;
+  background: #000;
+  pointer-events: none;
+}
+/* 가로 스크롤바 thumb: 아래쪽 가로 트랙(높이 ${SCROLLBAR_SIZE})의 왼쪽 50% */
+[p-scrollbar-x]::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 50%;
+  height: ${SCROLLBAR_SIZE};
+  background: #000;
+  pointer-events: none;
 }
 `;
 

@@ -64,11 +64,12 @@ Pug 위에 pug-frame이 추가로 부여하는 의미다.
 
 ### p-scrollbar-x / p-scrollbar-y
 
-`p-scrollbar-x` / `p-scrollbar-y` attribute를 가진 요소를 각각 가로/세로 스크롤 영역으로 만든다.
+`p-scrollbar-x` / `p-scrollbar-y` attribute를 가진 요소에 스크롤바를 **UI 요소로 그린다**(실제 제스처 스크롤은 지원하지 않는 모양 전용).
 
 - 표기: `section.flex(p-scrollbar-x)`처럼 값 없이 붙인다.
-- 컨텐츠가 넘치면 잘리고 스크롤 어포던스를 보여준다(가로: `overflow-x`, 세로: `overflow-y`).
-- canvas 전용이며 정적 출력에서는 제거된다. 자세한 내용과 제스처 관련 제약은 [canvas 문서](./canvas.md#p-scrollbar-x--p-scrollbar-y)를 참고한다.
+- 세로: 요소 오른쪽에 세로 트랙과 아래쪽 절반을 채우는 검은 thumb를 표시한다. 가로: 아래쪽에 가로 트랙과 왼쪽 절반을 채우는 thumb를 표시한다.
+- 컨텐츠는 요소 안에서 잘린다(`overflow: hidden`).
+- canvas 전용이며 정적 출력에서는 제거된다. 자세한 내용은 [canvas 문서](./canvas.md#p-scrollbar-x--p-scrollbar-y)를 참고한다.
 
 ### 기본 와이어프레임 요소
 

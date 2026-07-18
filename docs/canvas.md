@@ -77,11 +77,11 @@ Pointer Events로 마우스와 터치를 통합 처리한다.
 
 ## p-scrollbar-x / p-scrollbar-y
 
-`p-scrollbar-x` / `p-scrollbar-y` attribute를 가진 요소를 각각 가로/세로 스크롤 영역으로 만든다(CSS 전용 핸들러).
+`p-scrollbar-x` / `p-scrollbar-y` attribute를 가진 요소에 스크롤바를 **UI 요소로 그린다**(CSS 전용 핸들러).
 
-- 스타일: `[p-scrollbar-x]`는 `overflow-x: auto`, `[p-scrollbar-y]`는 `overflow-y: auto`(기본 `max-height: 240px`)를 Shadow 내부에 주입한다.
-- 용도: 컨텐츠가 넘칠 때 잘림/스크롤 어포던스를 와이어프레임으로 표현한다.
-- **제약**: canvas가 wheel(줌)·pointer(팬) 제스처를 가로채므로, 프레임 **내부의 실제 제스처 스크롤은 동작하지 않을 수 있다**. 현재는 오버플로 표현 용도이며, 실제 제스처 스크롤은 후속 과제다.
+- 스타일: 요소를 `position: relative; overflow: hidden`으로 만들고, thumb를 pseudo-element로 그린다. 세로는 `[p-scrollbar-y]::after`(오른쪽 세로 트랙 아래쪽 50%), 가로는 `[p-scrollbar-x]::before`(아래쪽 가로 트랙 왼쪽 50%). 트랙/thumb 두께는 16px, thumb는 검은색이다. x/y가 서로 다른 pseudo-element를 쓰므로 한 요소에 둘 다 붙어도 겹치지 않는다.
+- 용도: 스크롤 가능 영역임을 와이어프레임 UI로 표현한다(컨텐츠는 잘림).
+- **제약(설계상 확정)**: 실제 **제스처 스크롤은 지원하지 않는다**. canvas가 wheel(줌)·pointer(팬)을 가로채기도 하고, 목적 자체가 "스크롤바 모양"만 보여주는 것이다. thumb는 `pointer-events: none`으로 팬/클릭을 통과시킨다.
 
 ## Tailwind 런타임 유틸리티
 
