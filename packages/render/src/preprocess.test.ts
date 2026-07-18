@@ -16,8 +16,28 @@ describe("preprocess", () => {
 
   it("구조 키워드를 클래스 div로 매핑한다", () => {
     expect(preprocess("header")).toBe("div.frame-header");
+    expect(preprocess("nav")).toBe("div.frame-nav");
+    expect(preprocess("main")).toBe("div.frame-main");
     expect(preprocess("body")).toBe("div.frame-body");
     expect(preprocess("footer")).toBe("div.frame-footer");
+  });
+
+  it("요소 키워드를 pf 클래스 div로 매핑한다", () => {
+    expect(preprocess("circle")).toBe("div.pf-circle");
+    expect(preprocess("image")).toBe("div.pf-image");
+  });
+
+  it("요소 키워드의 클래스/attribute 잔여부를 보존한다", () => {
+    expect(preprocess("circle(p-icon='user')")).toBe(
+      "div.pf-circle(p-icon='user')",
+    );
+  });
+
+  it("section은 유효한 HTML 태그이므로 그대로 통과시킨다", () => {
+    expect(preprocess("section.flex")).toBe("section.flex");
+    expect(preprocess("section(p-scrollbar-x)")).toBe(
+      "section(p-scrollbar-x)",
+    );
   });
 
   it("일반 태그는 그대로 둔다", () => {

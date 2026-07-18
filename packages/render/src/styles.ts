@@ -64,6 +64,8 @@ ${canvasSizing}
 ${frameSizeRules}
 
 .frame-header,
+.frame-nav,
+.frame-main,
 .frame-body,
 .frame-footer {
   border: 1px solid #000;
@@ -72,8 +74,48 @@ ${frameSizeRules}
   overflow: hidden;
 }
 
+/* main/body는 남는 세로 공간을 채운다. */
+.frame-main,
 .frame-body {
   flex: 1;
+}
+
+/* --- 기본 유틸리티 클래스 --- */
+/* Tailwind 없이도 항상 동작하는 최소 세트. Tailwind의 동명 규칙과 충돌하지 않는다. */
+.flex {
+  display: flex;
+}
+
+.text-small {
+  font-size: 12px;
+}
+
+/* --- 와이어프레임 요소 자리표시자 --- */
+/* 원형 아바타. 내부 아이콘 SVG를 가운데 정렬한다. */
+.pf-circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border: 1px solid #000;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+/* 이미지 자리표시자: 회색 박스 + 대각선. */
+.pf-image {
+  min-width: 64px;
+  min-height: 64px;
+  border: 1px solid #000;
+  background: #eee
+    linear-gradient(
+      to top right,
+      transparent calc(50% - 1px),
+      #999 calc(50% - 1px),
+      #999 calc(50% + 1px),
+      transparent calc(50% + 1px)
+    );
 }
 
 button {

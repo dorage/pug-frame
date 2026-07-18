@@ -63,6 +63,20 @@ describe("render", () => {
     expect(html).not.toContain("p-focus");
     expect(html).toContain(">Next</button>");
   });
+
+  it("p-icon은 정적 출력에서도 SVG로 남고 attribute만 제거된다", () => {
+    const html = render("mobile\n    body\n        circle(p-icon='user')");
+    expect(html).toContain("<svg");
+    expect(html).toContain("lucide-user");
+    expect(html).not.toContain("p-icon");
+    expect(html).toContain('class="pf-circle"');
+  });
+
+  it("circle/image 요소를 pf 클래스 div로 렌더한다", () => {
+    const html = render("mobile\n    body\n        image\n        circle");
+    expect(html).toContain('class="pf-image"');
+    expect(html).toContain('class="pf-circle"');
+  });
 });
 
 describe("renderParts", () => {

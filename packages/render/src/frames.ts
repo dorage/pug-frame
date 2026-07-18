@@ -31,8 +31,21 @@ export const FRAME_TYPES = Object.keys(FRAME_SIZES) as FrameType[];
  */
 export const SECTION_CLASSES: Record<string, string> = {
   header: "frame-header",
+  nav: "frame-nav",
+  main: "frame-main",
   body: "frame-body",
   footer: "frame-footer",
+};
+
+/**
+ * 와이어프레임 기본 요소 키워드 → 클래스 매핑.
+ *
+ * 자주 쓰는 자리표시자(원형 아바타, 이미지 박스)를 짧은 키워드로 제공한다.
+ * 실제 스타일은 styles.ts의 `.pf-*` 규칙이 담당한다.
+ */
+export const ELEMENT_CLASSES: Record<string, string> = {
+  circle: "pf-circle",
+  image: "pf-image",
 };
 
 /**
@@ -46,8 +59,9 @@ const TAG_PATTERN = /^([A-Za-z][\w-]*)(.*)$/;
  * 주어진 태그 토큰을 pug 태그 표현으로 변환한다.
  * 선행 키워드만 매핑하고 `#id`/`.class`/`(attrs)` 등 pug 잔여부는 보존한다.
  * - 프레임 키워드(mobile 등): `div.frame.frame--{type}` + 잔여부
- * - 구조 키워드(header/body/footer): `div.frame-{section}` + 잔여부
- * - 그 외(div, button 등): 그대로 반환
+ * - 구조 키워드(header/nav/main/body/footer): `div.frame-{section}` + 잔여부
+ * - 요소 키워드(circle/image): `div.pf-{element}` + 잔여부
+ * - 그 외(div, button, section 등): 그대로 반환
  */
 export function mapTag(tag: string): string {
   const match = TAG_PATTERN.exec(tag);
@@ -62,6 +76,10 @@ export function mapTag(tag: string): string {
   const sectionClass = SECTION_CLASSES[keyword];
   if (sectionClass) {
     return `div.${sectionClass}${suffix}`;
+  }
+  const elementClass = ELEMENT_CLASSES[keyword];
+  if (elementClass) {
+    return `div.${elementClass}${suffix}`;
   }
   return tag;
 }

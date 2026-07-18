@@ -1,4 +1,5 @@
 import { compilePug } from "./compile.js";
+import { resolveIcons } from "./icons.js";
 import { preprocess } from "./preprocess.js";
 import { generateStyles } from "./styles.js";
 
@@ -60,9 +61,11 @@ export function renderFragment(
 ): string {
   const pugSource = preprocess(source);
   const compiled = compilePug(pugSource);
+  // p-icon은 컨텐츠 지시자이므로 정적/canvas 양쪽에 남도록 attribute 제거 전에 SVG를 삽입한다.
+  const withIcons = resolveIcons(compiled);
   const fragment = options.keepInteractive
-    ? compiled
-    : stripInteractiveAttrs(compiled);
+    ? withIcons
+    : stripInteractiveAttrs(withIcons);
   return `<div class="canvas">${fragment}</div>`;
 }
 
