@@ -11,7 +11,7 @@ NX 모노레포로 구성되며, 모든 패키지는 `packages/*`에 있고 `@pu
 - `@pug-frame/render` — pug-frame 문법을 HTML로 렌더링하는 코어 라이브러리.
 - `@pug-frame/cli` — pug-frame 파일을 HTML로 렌더링하는 커맨드라인 도구.
 - `@pug-frame/canvas` — 웹페이지 내 작은 영역에서 pug-frame을 렌더링하고 팬/줌하는 뷰어 컴포넌트.
-- `@pug-frame/playground` — 코드를 편집하며 결과를 즉시 canvas로 확인하는 데모 웹사이트. 코드가 URL에 담겨 링크만으로 재현된다.
+- `@pug-frame/playground` — 코드를 편집하며 결과를 즉시 canvas로 확인하는 데모 웹사이트. 코드가 URL에 담겨 링크만으로 재현된다. https://pug-frame-playground.pages.dev 에 배포된다.
 
 ## 플러그인
 
@@ -29,7 +29,7 @@ NX 모노레포로 구성되며, 모든 패키지는 `packages/*`에 있고 `@pu
 - [render](./docs/render.md) — 렌더 API와 도메인 매핑. 다른 패키지의 기반이다.
 - [cli](./docs/cli.md) — `pug-frame` CLI 사용법과 옵션.
 - [canvas](./docs/canvas.md) — `pugFrameCanvas` API, 카메라/인터랙션.
-- [playground](./docs/playground.md) — 코드 편집 데모 웹사이트, URL 공유 방식.
+- [playground](./docs/playground.md) — 코드 편집 데모 웹사이트, URL 공유 방식, Cloudflare Pages 배포.
 - [obsidian](./docs/obsidian.md) — Obsidian 플러그인 사용법과 빌드.
 - [vscode](./docs/vscode.md) — VS Code 확장 사용법과 빌드.
 
