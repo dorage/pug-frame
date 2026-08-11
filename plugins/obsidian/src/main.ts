@@ -1,5 +1,6 @@
 import { MarkdownPostProcessorContext, MarkdownRenderChild, Plugin } from 'obsidian';
 import { pugFrameCanvas, type PugFrameCanvas } from '@pug-frame/canvas';
+import { livePreviewParseAhead } from './livePreviewParse';
 import {
 	DEFAULT_SETTINGS,
 	PugFrameSettings,
@@ -19,6 +20,10 @@ export default class PugFramePlugin extends Plugin {
 			CODE_BLOCK_LANGUAGE,
 			(source, el, ctx) => this.renderCodeBlock(source, el, ctx),
 		);
+
+		// Live Preview는 문법 트리가 닫는 펜스까지 파싱돼야 코드블록 위젯을 만든다.
+		// 뷰포트보다 긴 블록을 위해 파싱을 미리 진행시킨다.
+		this.registerEditorExtension(livePreviewParseAhead);
 
 		this.addSettingTab(new PugFrameSettingTab(this.app, this));
 	}
