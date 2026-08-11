@@ -10,10 +10,30 @@ Obsidian 노트의 `pug-frame` 코드블록을 팬/줌 가능한 캔버스 와�
 - 코드블록은 자체 높이가 없으므로, 설정된 높이의 뷰포트 `div`를 만들어 그 안에서 `pugFrameCanvas`로 렌더링한다.
 - 코드블록 소스 문자열을 `options.pugframe`으로 넘긴다. 렌더 실패·소스 부재는 canvas가 뷰포트에 fallback 메시지로 처리한다.
 - 각 코드블록은 `MarkdownRenderChild`로 감싸 Obsidian 생명주기(뷰 언로드/재렌더)에 맞춰 `canvas.destroy()`로 리스너·DOM을 정리한다.
+- Live Preview(편집 모드)에서는 CodeMirror 문법 트리 파싱 범위를 앞당기는 에디터 확장을 함께 등록한다(`registerEditorExtension`). 아래 "Live Preview 사전 파싱" 참고.
+
+## Live Preview 사전 파싱
+
+읽기 모드와 달리 Live Preview는 CodeMirror 데코레이션으로 코드블록 위젯을 만든다. Obsidian 내부 구현상 다음 두 조건이 겹치면 긴 코드블록이 렌더링되지 않고 원본 소스가 그대로 보인다.
+
+- Obsidian은 데코레이션을 만들기 전에 문법 트리를 뷰포트 끝 +2000자까지만 파싱한다(`ensureSyntaxTree(state, viewport.to + 2000, 20)`).
+- 코드블록 위젯은 닫는 펜스 라인(`HyperMD-codeblock-end`)을 만났을 때 비로소 생성된다.
+
+즉 코드블록이 뷰포트보다 충분히 길면, 스크롤이 닫는 ```` ``` ```` 근처에 도달하기 전까지 위젯이 만들어지지 않는다. Obsidian 코어의 동작이라 코드블록 프로세서 쪽에서는 손댈 수 없다.
+
+플러그인은 `livePreviewParseAhead` CM6 확장으로 이를 보정한다.
+
+- 뷰포트나 문서가 바뀌면 문서를 훑어 뷰포트 끝 지점에 걸쳐 있는 `pug-frame` 코드블록을 찾는다.
+- 그 블록의 닫는 펜스까지 아직 파싱되지 않았으면(`syntaxTreeAvailable`) `forceParsing`으로 파싱을 앞당긴다.
+- `forceParsing`은 내부에서 `dispatch`를 호출하므로 업데이트 주기 밖(다음 틱)에서 실행한다.
+- 시간 예산(50ms) 안에 끝나지 않으면 진행된 만큼을 유지한 채 다음 틱에 이어서 파싱한다(최대 20회).
+- 대상은 `pug-frame` 블록으로 한정하고, 스캔은 뷰포트 끝을 지나면 중단해 큰 노트에서도 비용이 문서 크기에 비례하지 않게 한다.
+
+이 확장은 `@codemirror/language`·`@codemirror/view`·`@codemirror/state`를 사용한다. 세 모듈 모두 Obsidian이 런타임에 제공하므로 esbuild `external`로 두고 번들에 포함하지 않는다.
 
 ## 사용법
 
-노트에 `pug-frame` 언어의 코드블록을 작성하면 읽기 모드에서 캔버스로 렌더링된다.
+노트에 `pug-frame` 언어의 코드블록을 작성하면 읽기 모드와 Live Preview 모두에서 캔버스로 렌더링된다.
 
 ````markdown
 ```pug-frame

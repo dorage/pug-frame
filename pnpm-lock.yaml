@@ -116,6 +116,15 @@ importers:
         specifier: 0.1.0
         version: link:../../packages/canvas
     devDependencies:
+      '@codemirror/language':
+        specifier: ^6.12.4
+        version: 6.12.4
+      '@codemirror/state':
+        specifier: ^6.7.1
+        version: 6.7.1
+      '@codemirror/view':
+        specifier: ^6.43.6
+        version: 6.43.6
       '@eslint/js':
         specifier: ^9.39.4
         version: 9.39.5
