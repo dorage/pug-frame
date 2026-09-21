@@ -1,0 +1,122 @@
+name: Obsidian Plugin
+
+# PR·main push: 빌드 검증 + 산출물(main.js, manifest.json, styles.css)을 Artifact 로 업로드
+# main push(manifest 버전이 새로 올라간 경우)·x.y.z 태그 push: 초안 GitHub Release 생성
+# PR: 플러그인 동작에 영향을 주는 변경이면 manifest.json 버전 올림을 강제
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+'
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: obsidian-plugin-${{ github.ref }}
+  # 릴리스 중인 main/태그 실행은 취소하지 않는다
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
+jobs:
+  version-check:
+    # `no-version-bump` 라벨을 붙이면 검사를 건너뛴다(비상 탈출구)
+    if: github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'no-version-bump')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: oven-sh/setup-bun@v2
+
+      - name: Check manifest version bump
+        run: bun plugins/obsidian/scripts/check-version.ts origin/${{ github.base_ref }}
+
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.meta.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # 플러그인 번들의 입력. render 는 nx 가 canvas 의 의존성으로 먼저 빌드한다
+      - name: Build canvas
+        run: pnpm exec nx run canvas:build
+
+      - name: Build plugin
+        run: pnpm --filter pug-frame-obsidian build
+
+      - name: Read manifest version
+        id: meta
+        run: echo "version=$(jq -r .version plugins/obsidian/manifest.json)" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pug-frame-obsidian-${{ steps.meta.outputs.version }}-${{ github.sha }}
+          path: |
+            plugins/obsidian/main.js
+            plugins/obsidian/manifest.json
+            plugins/obsidian/styles.css
+          if-no-files-found: error
+          retention-days: 14
+
+  release:
+    needs: build
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      VERSION: ${{ needs.build.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: pug-frame-obsidian-${{ env.VERSION }}-${{ github.sha }}
+          path: dist
+
+      # 태그 push: Obsidian 은 태그와 manifest.json version 이 같아야 업데이트를 찾는다
+      - name: Verify tag matches manifest version
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          tag="${GITHUB_REF#refs/tags/}"
+          if [ "$tag" != "$VERSION" ]; then
+            echo "::error::태그 $tag 가 manifest.json version $VERSION 과 다릅니다"
+            exit 1
+          fi
+
+      # main push: 같은 버전의 릴리스(초안 포함)가 이미 있으면 만들지 않는다
+      - name: Skip if release exists
+        id: exists
+        run: |
+          if gh release view "$VERSION" >/dev/null 2>&1; then
+            echo "release $VERSION already exists, skipping"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create draft release
+        if: steps.exists.outputs.skip != 'true'
+        run: |
+          gh release create "$VERSION" \
+            --draft \
+            --title "$VERSION" \
+            --target "$GITHUB_SHA" \
+            --generate-notes \
+            dist/main.js dist/manifest.json dist/styles.css

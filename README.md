@@ -30,7 +30,7 @@ NX 모노레포로 구성되며, 모든 패키지는 `packages/*`에 있고 `@pu
 - [cli](./docs/cli.md) — `pug-frame` CLI 사용법과 옵션.
 - [canvas](./docs/canvas.md) — `pugFrameCanvas` API, 카메라/인터랙션.
 - [playground](./docs/playground.md) — 코드 편집 데모 웹사이트, URL 공유 방식, Cloudflare Pages 배포.
-- [obsidian](./docs/obsidian.md) — Obsidian 플러그인 사용법과 빌드.
+- [obsidian](./docs/obsidian.md) — Obsidian 플러그인 사용법, 빌드, 버전 올림 규칙과 릴리스.
 - [vscode](./docs/vscode.md) — VS Code 확장 사용법과 빌드.
 
 ## 시작하기

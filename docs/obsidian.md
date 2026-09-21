@@ -67,3 +67,38 @@ mobile#main-1
 - `npm run build --workspace pug-frame-obsidian` — 타입체크(tsc) 후 esbuild 번들.
 
 산출물 `main.js`는 릴리스 자산이라 저장소에 커밋하지 않는다(`.gitignore`). Obsidian 설치 시 `manifest.json`, `main.js`, `styles.css`를 vault의 `.obsidian/plugins/pug-frame/`에 둔다.
+
+## 버전과 릴리스
+
+플러그인은 GitHub Release 로 배포한다. Obsidian(과 BRAT)은 `manifest.json`의 `version`과 **같은 이름의 태그**가 붙은 릴리스에서 `main.js`, `manifest.json`, `styles.css`를 개별 자산으로 내려받는다. 태그에는 `v` 접두사를 붙이지 않는다(`0.1.0`).
+
+### 버전을 올려야 하는 경우
+
+다음 중 하나에 해당하는 PR 은 `manifest.json`의 `version`을 올려야 한다. CI(`.github/workflows/obsidian-plugin.yml`의 `version-check`)가 기준 브랜치와 비교해 검사하고, 올리지 않았으면 실패한다.
+
+- 플러그인 자체가 바뀜 — `plugins/obsidian/src/**`, `styles.css`, `esbuild.config.mjs`, `package.json`의 의존성(`dependencies`/`devDependencies`/`peerDependencies`; scripts 만 바뀐 경우는 제외).
+- 번들되는 코어 패키지의 동작이 바뀜 — `packages/render/src/**`, `packages/canvas/src/**` 와 두 패키지 `package.json`의 의존성. 플러그인 `main.js`는 이 둘을 통째로 번들하므로 코어가 바뀌면 플러그인 동작도 바뀐다.
+
+문서(`*.md`), 테스트(`*.test.ts`), CLI, playground, 툴링만 바뀐 PR 은 대상이 아니다. 예외적으로 검사를 건너뛰어야 하면 PR 에 `no-version-bump` 라벨을 붙인다.
+
+### 올리는 방법
+
+```bash
+# 리포 루트에서
+pnpm --filter pug-frame-obsidian bump patch     # 또는 minor / major / 1.2.3
+```
+
+`scripts/bump-version.ts`가 `package.json`, `manifest.json`, `versions.json` 세 파일을 한 번에 맞춘다. git 커밋·태그는 만들지 않는다. PR 본문의 "Obsidian 플러그인 버전" 항목에 올린 버전과 이유를 적는다.
+
+로컬에서 검사만 미리 돌려보려면 `pnpm --filter pug-frame-obsidian check-version` (기준 `origin/main`).
+
+### 릴리스 흐름
+
+- PR 과 main push 마다 `build` job 이 플러그인을 빌드하고 `main.js`, `manifest.json`, `styles.css`를 Actions Artifact(`pug-frame-obsidian-<version>-<sha>`, 14일 보존)로 올린다. 리뷰·수동 테스트용이다.
+- 버전을 올린 PR 이 main 에 머지되면 `release` job 이 그 버전의 릴리스가 없는지 확인한 뒤 **초안(draft) 릴리스**를 만들고 세 파일을 첨부한다. 초안이므로 사람이 릴리스 노트를 확인하고 Publish 를 눌러야 사용자에게 배포된다. 태그는 Publish 시점에 GitHub 이 만든다.
+- `x.y.z` 태그를 직접 push 해도 같은 `release` job 이 돈다. 이때 태그가 `manifest.json`의 `version`과 다르면 실패한다.
+
+### 설치
+
+- 릴리스에서 `main.js`, `manifest.json`, `styles.css`를 받아 vault 의 `.obsidian/plugins/pug-frame/`에 둔다.
+- 또는 BRAT 플러그인에 `dorage/pug-frame` 리포를 등록하면 공개된 릴리스를 자동으로 받는다.
