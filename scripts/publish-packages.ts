@@ -17,12 +17,8 @@ import { npmPackageDirs, readJson, repoRoot } from './versions';
 const dryRun = process.argv.includes('--dry-run');
 const inActions = process.env.GITHUB_ACTIONS === 'true';
 
-function npm(args: string[], cwd: string) {
-	return Bun.spawnSync(['npm', ...args], { cwd, stdout: 'pipe', stderr: 'pipe' });
-}
-
 function existsOnRegistry(name: string, version: string): boolean {
-	const proc = npm(['view', `${name}@${version}`, 'version'], repoRoot);
+	const proc = Bun.spawnSync(['npm', 'view', `${name}@${version}`, 'version'], { cwd: repoRoot, stdout: 'pipe', stderr: 'pipe' });
 	if (proc.exitCode === 0) return proc.stdout.toString().trim() === version;
 	// 패키지 자체가 없거나(E404) 그 버전만 없을 때 npm view 는 실패한다.
 	if (/E404/.test(proc.stderr.toString())) return false;
@@ -47,9 +43,8 @@ for (const dir of npmPackageDirs) {
 	if (dryRun) args.push('--dry-run');
 
 	console.log(`${name}@${version}: npm ${args.join(' ')}`);
-	const proc = npm(args, resolve(repoRoot, dir));
-	process.stdout.write(proc.stdout.toString());
-	process.stderr.write(proc.stderr.toString());
+	// 로컬 수동 배포에서 npm 이 2단계 인증(OTP)을 브라우저로 진행할 수 있도록 터미널을 그대로 물려준다
+	const proc = Bun.spawnSync(['npm', ...args], { cwd: resolve(repoRoot, dir), stdio: ['inherit', 'inherit', 'inherit'] });
 	if (proc.exitCode !== 0) {
 		console.error(`${name}@${version}: 배포 실패 (exit ${proc.exitCode})`);
 		failed = true;
