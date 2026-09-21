@@ -76,8 +76,8 @@ mobile#main-1
 
 다음 중 하나에 해당하는 PR 은 `manifest.json`의 `version`을 올려야 한다. CI(`.github/workflows/obsidian-plugin.yml`의 `version-check`)가 기준 브랜치와 비교해 검사하고, 올리지 않았으면 실패한다.
 
-- 플러그인 자체가 바뀜 — `plugins/obsidian/src/**`, `styles.css`, `esbuild.config.mjs`, `package.json`(의존성).
-- 번들되는 코어 패키지의 동작이 바뀜 — `packages/render/src/**`, `packages/canvas/src/**`. 플러그인 `main.js`는 이 둘을 통째로 번들하므로 코어가 바뀌면 플러그인 동작도 바뀐다.
+- 플러그인 자체가 바뀜 — `plugins/obsidian/src/**`, `styles.css`, `esbuild.config.mjs`, `package.json`의 의존성(`dependencies`/`devDependencies`/`peerDependencies`; scripts 만 바뀐 경우는 제외).
+- 번들되는 코어 패키지의 동작이 바뀜 — `packages/render/src/**`, `packages/canvas/src/**` 와 두 패키지 `package.json`의 의존성. 플러그인 `main.js`는 이 둘을 통째로 번들하므로 코어가 바뀌면 플러그인 동작도 바뀐다.
 
 문서(`*.md`), 테스트(`*.test.ts`), CLI, playground, 툴링만 바뀐 PR 은 대상이 아니다. 예외적으로 검사를 건너뛰어야 하면 PR 에 `no-version-bump` 라벨을 붙인다.
 

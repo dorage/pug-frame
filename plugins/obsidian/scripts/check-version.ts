@@ -21,11 +21,13 @@ const triggerPrefixes = [
 	`${pluginDir}/src/`,
 	`${pluginDir}/styles.css`,
 	`${pluginDir}/esbuild.config.mjs`,
-	`${pluginDir}/package.json`,
 	'packages/render/src/',
 	'packages/canvas/src/',
 ];
 const ignoreSuffixes = ['.md', '.test.ts'];
+// package.json 은 번들에 들어가는 의존성이 바뀐 경우에만 대상으로 본다(scripts 변경은 제외).
+const dependencyFiles = [`${pluginDir}/package.json`, 'packages/render/package.json', 'packages/canvas/package.json'];
+const dependencyKeys = ['dependencies', 'devDependencies', 'peerDependencies'];
 
 function git(...args: string[]): string {
 	const proc = Bun.spawnSync(['git', ...args]);
@@ -61,11 +63,19 @@ function compare(a: string, b: string): number {
 const changed = git('diff', '--name-only', `${baseRef}...HEAD`)
 	.split('\n')
 	.filter(Boolean);
-const triggering = changed.filter(
-	(f) =>
+function dependenciesChanged(path: string): boolean {
+	const pick = (json: Record<string, unknown> | null) =>
+		JSON.stringify(dependencyKeys.map((k) => json?.[k] ?? null));
+	return pick(readBaseJson(path)) !== pick(readJson(path));
+}
+
+const triggering = changed.filter((f) => {
+	if (dependencyFiles.includes(f)) return dependenciesChanged(f);
+	return (
 		triggerPrefixes.some((p) => f.startsWith(p)) &&
-		!ignoreSuffixes.some((s) => f.endsWith(s)),
-);
+		!ignoreSuffixes.some((s) => f.endsWith(s))
+	);
+});
 
 const head = readJson(manifestPath);
 const base = readBaseJson(manifestPath);
@@ -83,7 +93,7 @@ if (triggering.length > 0 && !bumped) {
 		'다음 파일이 대상입니다:',
 		...triggering.map((f) => `  - ${f}`),
 		'',
-		'`pnpm --filter pug-frame-obsidian version <patch|minor|major>` 로 버전을 올리고,',
+		'`pnpm --filter pug-frame-obsidian bump <patch|minor|major>` 로 버전을 올리고,',
 		'PR 본문의 "버전" 항목에 올린 이유를 적어 주세요.',
 	);
 }
