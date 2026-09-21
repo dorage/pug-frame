@@ -74,10 +74,10 @@ mobile#main-1
 
 ### 버전을 올려야 하는 경우
 
-다음 중 하나에 해당하는 PR 은 `manifest.json`의 `version`을 올려야 한다. CI(`.github/workflows/obsidian-plugin.yml`의 `version-check`)가 기준 브랜치와 비교해 검사하고, 올리지 않았으면 실패한다.
+다음 중 하나에 해당하는 PR 은 `manifest.json`의 `version`을 올려야 한다. CI(`.github/workflows/release.yml`의 `version-check`)가 기준 브랜치와 비교해 검사하고, 올리지 않았으면 실패한다.
 
-- 플러그인 자체가 바뀜 — `plugins/obsidian/src/**`, `styles.css`, `esbuild.config.mjs`, `package.json`의 의존성(`dependencies`/`devDependencies`/`peerDependencies`; scripts 만 바뀐 경우는 제외).
-- 번들되는 코어 패키지의 동작이 바뀜 — `packages/render/src/**`, `packages/canvas/src/**` 와 두 패키지 `package.json`의 의존성. 플러그인 `main.js`는 이 둘을 통째로 번들하므로 코어가 바뀌면 플러그인 동작도 바뀐다.
+- 플러그인 자체가 바뀜 — `plugins/obsidian/src/**`, `styles.css`, `esbuild.config.mjs`, `package.json`의 외부 의존성(`dependencies`/`devDependencies`/`peerDependencies`; `@pug-frame/*` 참조와 scripts 만 바뀐 경우는 제외).
+- 번들되는 코어 패키지의 동작이 바뀜 — `packages/render/src/**`, `packages/canvas/src/**` 와 두 패키지 `package.json`의 외부 의존성. 플러그인 `main.js`는 이 둘을 통째로 번들하므로 코어가 바뀌면 플러그인 동작도 바뀐다. 이 경우 npm 패키지 버전도 함께 올려야 한다([publishing 문서](./publishing.md)).
 
 문서(`*.md`), 테스트(`*.test.ts`), CLI, playground, 툴링만 바뀐 PR 은 대상이 아니다. 예외적으로 검사를 건너뛰어야 하면 PR 에 `no-version-bump` 라벨을 붙인다.
 
@@ -85,18 +85,19 @@ mobile#main-1
 
 ```bash
 # 리포 루트에서
-pnpm --filter pug-frame-obsidian bump patch     # 또는 minor / major / 1.2.3
+pnpm bump obsidian patch   # 또는 minor / major / 1.2.3
+pnpm bump all patch        # 코어(render/canvas)도 바뀌어 npm 패키지 버전까지 올릴 때
 ```
 
-`scripts/bump-version.ts`가 `package.json`, `manifest.json`, `versions.json` 세 파일을 한 번에 맞춘다. git 커밋·태그는 만들지 않는다. PR 본문의 "Obsidian 플러그인 버전" 항목에 올린 버전과 이유를 적는다.
+리포 루트의 `scripts/bump-version.ts`가 `package.json`, `manifest.json`, `versions.json` 세 파일을 한 번에 맞춘다. git 커밋·태그는 만들지 않는다. PR 본문의 "Obsidian 플러그인 버전" 항목에 올린 버전과 이유를 적는다.
 
-로컬에서 검사만 미리 돌려보려면 `pnpm --filter pug-frame-obsidian check-version` (기준 `origin/main`).
+로컬에서 검사만 미리 돌려보려면 `pnpm check-version` (기준 `origin/main`). npm 패키지 규칙도 같이 검사한다.
 
 ### 릴리스 흐름
 
 - PR 과 main push 마다 `build` job 이 플러그인을 빌드하고 `main.js`, `manifest.json`, `styles.css`를 Actions Artifact(`pug-frame-obsidian-<version>-<sha>`, 14일 보존)로 올린다. 리뷰·수동 테스트용이다.
-- 버전을 올린 PR 이 main 에 머지되면 `release` job 이 그 버전의 릴리스가 없는지 확인한 뒤 **초안(draft) 릴리스**를 만들고 세 파일을 첨부한다. 초안이므로 사람이 릴리스 노트를 확인하고 Publish 를 눌러야 사용자에게 배포된다. 태그는 Publish 시점에 GitHub 이 만든다.
-- `x.y.z` 태그를 직접 push 해도 같은 `release` job 이 돈다. 이때 태그가 `manifest.json`의 `version`과 다르면 실패한다.
+- 버전을 올린 PR 이 main 에 머지되면 `release-obsidian` job 이 그 버전의 릴리스가 없는지 확인한 뒤 **초안(draft) 릴리스**를 만들고 세 파일을 첨부한다. 초안이므로 사람이 릴리스 노트를 확인하고 Publish 를 눌러야 사용자에게 배포된다. 태그는 Publish 시점에 GitHub 이 만든다.
+- `x.y.z` 태그를 직접 push 해도 같은 `release-obsidian` job 이 돈다. 이때 태그가 `manifest.json`의 `version`과 다르면 실패한다.
 
 ### 설치
 
