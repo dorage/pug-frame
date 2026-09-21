@@ -9,12 +9,14 @@
  * 인증은 GitHub Actions 의 Trusted Publishing(OIDC)에 맡긴다. 토큰을 넘기지 않는다.
  * 빌드(dist)는 미리 되어 있어야 한다.
  *
- * 사용: bun scripts/publish-packages.ts [--dry-run]
+ * 사용: bun scripts/publish-packages.ts [--dry-run] [npm publish 에 넘길 추가 인자...]
+ *   예: 터미널 없이 돌릴 때 2단계 인증 코드를 직접 넘김 → --otp=123456
  */
 import { resolve } from 'node:path';
 import { npmPackageDirs, readJson, repoRoot } from './versions';
 
 const dryRun = process.argv.includes('--dry-run');
+const extraArgs = process.argv.slice(2).filter((a) => a !== '--dry-run');
 const inActions = process.env.GITHUB_ACTIONS === 'true';
 
 function existsOnRegistry(name: string, version: string): boolean {
@@ -41,8 +43,9 @@ for (const dir of npmPackageDirs) {
 	// provenance 는 GitHub Actions 의 OIDC 토큰으로만 만들 수 있다.
 	if (inActions) args.push('--provenance');
 	if (dryRun) args.push('--dry-run');
+	args.push(...extraArgs);
 
-	console.log(`${name}@${version}: npm ${args.join(' ')}`);
+	console.log(`${name}@${version}: npm ${args.map((a) => a.replace(/^(--otp=).+/, '$1***')).join(' ')}`);
 	// 로컬 수동 배포에서 npm 이 2단계 인증(OTP)을 브라우저로 진행할 수 있도록 터미널을 그대로 물려준다
 	const proc = Bun.spawnSync(['npm', ...args], { cwd: resolve(repoRoot, dir), stdio: ['inherit', 'inherit', 'inherit'] });
 	if (proc.exitCode !== 0) {
