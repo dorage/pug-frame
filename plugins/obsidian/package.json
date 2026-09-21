@@ -7,12 +7,10 @@
 	"scripts": {
 		"dev": "node esbuild.config.mjs",
 		"build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
-		"lint": "eslint .",
-		"bump": "bun scripts/bump-version.ts",
-		"check-version": "bun scripts/check-version.ts"
+		"lint": "eslint ."
 	},
 	"keywords": [],
-	"license": "0-BSD",
+	"license": "0BSD",
 	"dependencies": {
 		"@pug-frame/canvas": "0.1.0"
 	},

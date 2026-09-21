@@ -6,11 +6,11 @@ Pug 유사 문법으로 작성한 와이어프레임을 하나의 캔버스로 �
 
 ## 패키지
 
-NX 모노레포로 구성되며, 모든 패키지는 `packages/*`에 있고 `@pug-frame/*` 스코프를 쓴다.
+NX 모노레포로 구성되며, 모든 패키지는 `packages/*`에 있고 `@pug-frame/*` 스코프를 쓴다. `render`·`cli`·`canvas` 는 npm 에 배포된다([publishing](./docs/publishing.md)).
 
 - `@pug-frame/render` — pug-frame 문법을 HTML로 렌더링하는 코어 라이브러리.
 - `@pug-frame/cli` — pug-frame 파일을 HTML로 렌더링하는 커맨드라인 도구.
-- `@pug-frame/canvas` — 웹페이지 내 작은 영역에서 pug-frame을 렌더링하고 팬/줌하는 뷰어 컴포넌트.
+- `@pug-frame/canvas` — 웹페이지 내 작은 영역에서 pug-frame을 렌더링하고 팬/줌하는 뷰어 컴포넌트. `render`와 Node 폴리필을 번들에 포함하므로 React 등 프론트엔드 프로젝트에서는 이 패키지를 `npm install @pug-frame/canvas`로 설치해 바로 쓴다.
 - `@pug-frame/playground` — 코드를 편집하며 결과를 즉시 canvas로 확인하는 데모 웹사이트. 코드가 URL에 담겨 링크만으로 재현된다. https://pug-frame-playground.pages.dev 에 배포된다.
 
 ## 플러그인
@@ -31,6 +31,7 @@ NX 모노레포로 구성되며, 모든 패키지는 `packages/*`에 있고 `@pu
 - [canvas](./docs/canvas.md) — `pugFrameCanvas` API, 카메라/인터랙션.
 - [playground](./docs/playground.md) — 코드 편집 데모 웹사이트, URL 공유 방식, Cloudflare Pages 배포.
 - [obsidian](./docs/obsidian.md) — Obsidian 플러그인 사용법, 빌드, 버전 올림 규칙과 릴리스.
+- [publishing](./docs/publishing.md) — npm 배포: lockstep 버전 규칙, `pnpm bump`, Trusted Publishing 최초 설정.
 - [vscode](./docs/vscode.md) — VS Code 확장 사용법과 빌드.
 
 ## 시작하기

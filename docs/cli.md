@@ -8,7 +8,8 @@ pug-frame 문법 파일을 읽어 자기완결적 HTML 문서로 변환·저장�
 
 ## 설치 / 빌드
 
-- 모노레포 루트에서 `npm install` 후 `npx nx run cli:build`로 빌드한다.
+- npm 에서: `npx @pug-frame/cli <input>` 으로 설치 없이 실행하거나, `npm install -g @pug-frame/cli` 후 `pug-frame <input>`. 배포 흐름은 [publishing 문서](./publishing.md) 참고.
+- 리포에서: 모노레포 루트에서 `pnpm install` 후 `npx nx run cli:build`로 빌드한다.
 - 빌드 결과 `packages/cli/dist/cli.js`가 `pug-frame` bin으로 연결된다.
 - 개발 중에는 `npx nx run cli:dev -- <input>`으로 빌드 없이 실행할 수 있다.
 

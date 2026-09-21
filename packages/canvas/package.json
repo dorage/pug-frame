@@ -2,6 +2,16 @@
   "name": "@pug-frame/canvas",
   "version": "0.1.0",
   "description": "웹페이지 내 작은 영역에서 pug-frame을 렌더링하고 팬/줌하는 뷰어 컴포넌트",
+  "license": "0BSD",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dorage/pug-frame.git",
+    "directory": "packages/canvas"
+  },
+  "homepage": "https://github.com/dorage/pug-frame#readme",
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
   "main": "dist/index.js",
   "module": "dist/index.js",

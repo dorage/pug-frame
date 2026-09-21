@@ -2,6 +2,12 @@
 
 pug-frame 문법을 HTML로 렌더링하는 코어 라이브러리. CLI와 canvas가 모두 이 패키지를 재사용한다.
 
+## 설치
+
+- `npm install @pug-frame/render`. Node 에서는 그대로 쓴다.
+- 브라우저에서 쓰려면 번들러가 `assert`/`util`/`process`를 폴리필해야 한다(pug 하위 패키지가 요구). 설정 없이 바로 쓰려면 이 패키지를 번들해 둔 [`@pug-frame/canvas`](./canvas.md)를 권한다.
+- 배포 흐름은 [publishing 문서](./publishing.md) 참고.
+
 ## 도메인: pug-frame 문법
 
 pug-frame은 Pug 위에 와이어프레임용 의미를 얹은 DSL이다. 표준 Pug와의 핵심 차이는 **하나의 문서에 여러 화면(screen)을 담을 수 있다**는 점이다.

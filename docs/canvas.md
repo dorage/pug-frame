@@ -10,6 +10,7 @@
 
 ## 설치 / 브라우저 사용 주의
 
+- `npm install @pug-frame/canvas`. 배포 흐름은 [publishing 문서](./publishing.md) 참고.
 - `@pug-frame/canvas`의 lib 빌드는 `@pug-frame/render`(및 pug 하위 패키지)를 번들에 포함하고 `assert`/`util`/`process`를 폴리필하므로, 소비자는 추가 설정 없이 브라우저에서 사용할 수 있다.
 - 개발 데모는 `npx nx run canvas:dev`로 실행한다(소스를 직접 로드하므로 `demo/vite.config.ts`에서 Node 폴리필을 적용한다).
 

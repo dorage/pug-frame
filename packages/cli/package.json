@@ -2,6 +2,16 @@
   "name": "@pug-frame/cli",
   "version": "0.1.0",
   "description": "pug-frame 파일을 HTML로 렌더링하는 CLI",
+  "license": "0BSD",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dorage/pug-frame.git",
+    "directory": "packages/cli"
+  },
+  "homepage": "https://github.com/dorage/pug-frame#readme",
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
   "bin": {
     "pug-frame": "dist/cli.js"
