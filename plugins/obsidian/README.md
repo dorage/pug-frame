@@ -46,3 +46,10 @@ npm run build --workspace pug-frame-obsidian
 
 - `main.js`는 릴리스 산출물이라 저장소에 커밋하지 않는다(`.gitignore`).
 - Obsidian에 설치할 때는 `manifest.json`, `main.js`, `styles.css`를 vault의 `.obsidian/plugins/pug-frame/`에 둔다.
+
+## 버전 올림 / 릴리스
+
+- 플러그인 소스나 번들되는 코어(`packages/render`, `packages/canvas`)의 동작이 바뀌는 PR 은 `manifest.json` 버전을 올려야 한다. CI 가 검사한다.
+- 올리기: 리포 루트에서 `pnpm --filter pug-frame-obsidian bump <patch|minor|major>`. `package.json`, `manifest.json`, `versions.json`이 함께 갱신된다.
+- 버전을 올린 PR 이 main 에 머지되면 CI 가 초안 GitHub Release 를 만든다. Publish 는 사람이 누른다.
+- 자세한 규칙은 [docs/obsidian.md](../../docs/obsidian.md)의 "버전과 릴리스" 참고.
