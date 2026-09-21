@@ -2,6 +2,16 @@
   "name": "@pug-frame/render",
   "version": "0.1.0",
   "description": "pug-frame 문법을 HTML로 렌더링하는 코어 라이브러리",
+  "license": "0BSD",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dorage/pug-frame.git",
+    "directory": "packages/render"
+  },
+  "homepage": "https://github.com/dorage/pug-frame#readme",
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
