@@ -11,7 +11,10 @@
   "scripts": {
     "build": "nx run-many -t build",
     "test": "nx run-many -t test",
-    "cli": "nx run cli:dev"
+    "cli": "nx run cli:dev",
+    "bump": "bun scripts/bump-version.ts",
+    "check-version": "bun scripts/check-version.ts",
+    "publish-packages": "bun scripts/publish-packages.ts"
   },
   "devDependencies": {
     "@types/node": "^22.10.0",
@@ -19,5 +22,6 @@
     "tsx": "^4.19.0",
     "typescript": "^5.7.0",
     "vitest": "^2.1.0"
-  }
+  },
+  "license": "0BSD"
 }
